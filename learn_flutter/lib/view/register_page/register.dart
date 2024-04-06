@@ -1,4 +1,6 @@
 import "package:flutter/material.dart";
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 enum Gender { Male, Female }
 
@@ -17,6 +19,42 @@ class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
   final ScrollController scrollController = ScrollController();
   final _passwordController = TextEditingController();
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _idController = TextEditingController();
+  final _confirmationPasswordController = TextEditingController();
+
+  final String HOST = 'http://192.168.1.13:8000';
+
+  Future<void> postRegisterData() async {
+  Map<String, dynamic> data = {
+    'id':_idController.text,
+    'name':_nameController.text,
+    'email':_emailController.text,
+    'gender':_gender?.index,
+    'level':_level?.index,
+    'password':_passwordController.text,
+    'confirmation_password': _confirmationPasswordController.text
+  };
+
+    try {
+      final response = await http.post(
+        Uri.parse('$HOST/user/register'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(data),
+      );
+      if (response.statusCode == 200) {
+        print('Registered Succefully');
+      } else {
+        print('Failed to post data: ${response.statusCode}');
+        print('${response.body}');
+      }
+    } catch (e) {
+      print('Error posting data: $e');
+    }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +79,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 style: TextStyle(fontWeight: FontWeight.bold),
               )),
               TextFormField(
+                controller: _nameController,
                 decoration: const InputDecoration(
                   prefixIcon: Icon(Icons.person_2_outlined),
                   contentPadding: EdgeInsets.all(10),
@@ -78,6 +117,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     });
                   }),
               TextFormField(
+                controller:_emailController,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return "This Field is mandatory";
@@ -95,6 +135,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
               ),
               TextFormField(
+                controller: _idController,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return "This Field is Mandatory";
@@ -168,6 +209,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
               ),
               TextFormField(
+                controller: _confirmationPasswordController,
                 validator: (value) {
                   if (value == null || value.length < 8) {
                     return "Require atleast 8 Characters";
@@ -190,7 +232,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 child: ElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        print("Sa7 kda");
+                        postRegisterData();
                       }
                     },
                     child: const Text("Register")),

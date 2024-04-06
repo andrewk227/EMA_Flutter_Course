@@ -14,18 +14,19 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  final _id = TextEditingController();
-  final _password = TextEditingController() ;
+  final _idController = TextEditingController();
+  final _passwordController = TextEditingController() ;
+  final String HOST = 'http://192.168.1.13:8000';
 
-  Future<void> postData() async {
+  Future<void> postLoginData() async {
   Map<String, dynamic> data = {
-    'id': _id.text,
-    'password': _password.text,
+    'id': _idController.text,
+    'password': _passwordController.text,
   };
 
     try {
       final response = await http.post(
-        Uri.parse('http://192.168.1.13:8000/user/login'),
+        Uri.parse('$HOST/user/login'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -33,7 +34,7 @@ class _LoginPageState extends State<LoginPage> {
       );
 
       if (response.statusCode == 200) {
-        print('Posted successfully');
+        print('Logged in Successfully');
       } else {
         print('Failed to post data: ${response.statusCode}');
         print('${response.body}');
@@ -66,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
             height: 10,
           ),
           TextFormField(
-            controller: _id,
+            controller: _idController,
             decoration: const InputDecoration(
             prefixIcon: Icon(Icons.person_2_outlined),
             labelText: "Student ID",
@@ -75,7 +76,7 @@ class _LoginPageState extends State<LoginPage> {
             height: 10,
           ),
           TextFormField(
-            controller: _password,
+            controller: _passwordController,
               decoration: const InputDecoration(
             prefixIcon: Icon(Icons.password_outlined),
             labelText: "Password",
@@ -84,7 +85,7 @@ class _LoginPageState extends State<LoginPage> {
             height: 10,
           ),
           ElevatedButton(
-              onPressed:postData,
+              onPressed:postLoginData,
               child: const Text("Login")),
         ]))));
   }

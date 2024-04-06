@@ -33,8 +33,9 @@ def register(user:dict):
     if not valid_password(user['password']):
         raise HTTPException(status_code=400 , detail="Password Length must be more than 7")
 
-    gender = user['gender'] if 'gender' in user else "NULL"
-    level = user['level'] if 'level' in user else "NULL"
+    gender = "NULL" if user['gender'] is None else user['gender']
+    level = "NULL" if user['level'] is None else user['level']
+
     insert_query = f"INSERT INTO Students VALUES ('{user['id']}' , '{ user['name']}' , '{user['email']}' , {gender} , {level} , '{user['password']}' );"
 
     if equal(user['password'] , user['confirmation_password']):
@@ -80,8 +81,9 @@ def update(user:dict):
     if not valid_email(user['email']):
         raise HTTPException(status_code=400 , detail="Invalid FCAI Email")
 
-    gender = user['gender'] if 'gender' in user else "NULL"
-    level = user['level'] if 'level' in user else "NULL"
+    gender = "NULL" if user['gender'] is None else user['gender']
+    level = "NULL" if user['level'] is None else user['level']
+
     update_query = f"UPDATE Students SET name = '{user['name']}' , email='{user['email']}' , gender = {gender} , level = {level} , password = '{user['password']}' WHERE id = '{ID}';"
 
     excute_update_query(update_query)
