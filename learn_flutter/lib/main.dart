@@ -10,6 +10,6 @@ void main() {
       primaryColor: Colors.blue,
       brightness: Brightness.light,
     ),
-    home: const RegisterPage(),
+    home: const ProfilePage(),
   ));
 }

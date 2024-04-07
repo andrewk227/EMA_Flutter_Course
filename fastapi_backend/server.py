@@ -60,32 +60,37 @@ def login(credentials:dict):
 
 
 @app.put("/user/update")
-def update(user:dict):
+def update(user_creds:dict):
 
-    if not valid_user(user):
-        raise HTTPException(status_code=400 , detail="Missing User Fields")
-
-    ID = user['id']
-    user_select_query = f"SELECT * FROM Students WHERE id = '{ID}';"
+    ID = user_creds['id']
+    user_select_query = f"SELECT * FROM Students WHERE id = '{ID}' AND password = '{user_creds['password']}';"
 
     rows = excute_select_query(user_select_query)
     if not rows:
         raise HTTPException(status_code=400 , detail="User not found")
 
-    if not valid_name(user['name']):
-        raise HTTPException(status_code=400 , detail="Missing name Field")
-
-    if not valid_password(user['password']):
+    if not valid_password(user_creds['password']):
         raise HTTPException(status_code=400 , detail="Password Length must be more than 7")
 
-    if not valid_email(user['email']):
-        raise HTTPException(status_code=400 , detail="Invalid FCAI Email")
+    if not valid_name(user_creds['name']):
+        raise HTTPException(status_code=400 , detail="Name is Invalid")
 
-    gender = "NULL" if user['gender'] is None else user['gender']
-    level = "NULL" if user['level'] is None else user['level']
 
-    update_query = f"UPDATE Students SET name = '{user['name']}' , email='{user['email']}' , gender = {gender} , level = {level} , password = '{user['password']}' WHERE id = '{ID}';"
+    level = "NULL" if user_creds['level'] is None else user_creds['level']
+
+    update_query = f"UPDATE Students SET name = '{user_creds['name']}' , level = {level}  WHERE id = '{ID}';"
 
     excute_update_query(update_query)
 
     return True
+
+
+@app.get('/user')
+def get_user_data(id:str):
+    user_select_query = f"SELECT * FROM Students WHERE id = '{id}';"
+    rows = excute_select_query(user_select_query)[0]
+    user = {
+        'name':rows[1],
+        'level':rows[4]
+    }
+    return user
