@@ -53,8 +53,8 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               const SizedBox(height: 30),
               TextFormField(
-                decoration: InputDecoration(
-                  prefixIcon: const Icon(Icons.person_2_outlined),
+                decoration: const InputDecoration(
+                  prefixIcon: Icon(Icons.person_2_outlined),
                   labelText: "Name",
                 ),
               ),
