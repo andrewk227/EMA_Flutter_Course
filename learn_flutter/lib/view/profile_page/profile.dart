@@ -60,8 +60,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
               SizedBox(height: 10),
-              Row(children: [
-                RadioListTile(
+              RadioListTile(
                     title: const Text("Male"),
                     value: Gender.Male,
                     groupValue: _gender,
@@ -79,7 +78,6 @@ class _ProfilePageState extends State<ProfilePage> {
                         _gender = value;
                       });
                     }),
-              ]),
               TextFormField(
                 decoration: const InputDecoration(
                   prefixIcon: Icon(Icons.email),
@@ -101,10 +99,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
               SizedBox(height: 10),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(children: [
-                  RadioListTile(
+              RadioListTile(
                       title: const Text("First Level"),
                       value: Level.First,
                       groupValue: _level,
@@ -140,8 +135,6 @@ class _ProfilePageState extends State<ProfilePage> {
                           _level = value;
                         });
                       }),
-                ]),
-              ),
               SizedBox(height: 10),
               ElevatedButton(onPressed: () {}, child: Text("update")),
             ]))));

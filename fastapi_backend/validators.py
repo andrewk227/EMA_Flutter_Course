@@ -1,7 +1,7 @@
 import re
 
 def valid_user(user:dict):
-    mandatory_fields  = ['name' , 'email' , 'id' , 'password']
+    mandatory_fields  = ['name' , 'email' , 'id' , 'password' , 'gender' , 'level']
     for field in mandatory_fields:
         if field not in user:
             return False
