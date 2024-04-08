@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
@@ -23,6 +24,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final _emailController = TextEditingController();
   final _idController = TextEditingController();
   final _confirmationPasswordController = TextEditingController();
+  final storage = FlutterSecureStorage();
 
   final String HOST = 'http://192.168.1.13:8000';
 
@@ -47,6 +49,8 @@ class _RegisterPageState extends State<RegisterPage> {
       );
       if (response.statusCode == 200) {
         print('Registered Succefully');
+        Map<String, dynamic> responseJson = jsonDecode(response.body);
+        await storage.write(key: 'access_token', value: responseJson['access_token']);
       } else {
         print('Failed to post data: ${response.statusCode}');
         print('${response.body}');

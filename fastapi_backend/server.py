@@ -1,4 +1,4 @@
-from fastapi import FastAPI , HTTPException
+from fastapi import FastAPI , HTTPException , Header
 from validators import valid_email , valid_id ,valid_name , valid_password , equal , valid_user_creds , valid_user
 from sqlite import excute_insert_query , excute_select_query , excute_update_query
 from tokens import generate_token_expire_days , create_access_token , decode_token
@@ -95,8 +95,8 @@ def update(user:dict):
     return True
 
 @app.post("/user")
-def get_user_data(tokens:dict):
-    data = decode_token(tokens['access_token'])
+def get_user_data(token:dict):
+    data = decode_token(token['access_token'])
     if not data:
         return {}
 
