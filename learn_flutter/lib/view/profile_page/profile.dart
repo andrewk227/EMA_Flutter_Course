@@ -17,7 +17,7 @@ class _ProfilePageState extends State<ProfilePage> {
   final _email = TextEditingController();
   final _password = TextEditingController();
   final _confirmationPassword = TextEditingController();
-
+  late Future _future;
 
   Level? _level;
   Gender? _gender;
@@ -67,7 +67,12 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
-
+ @override
+  void initState() {
+    // assign this variable your Future
+    _future = fetchData();
+    super.initState();
+  }
 
   @override
 
@@ -80,19 +85,39 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           backgroundColor: Theme.of(context).primaryColor,
         ),
-        body: FutureBuilder(
-          future: fetchData(),
+        body:FutureBuilder(
+          future: _future,
           builder: (context ,snapshot) {
-            print(snapshot.data);
 
-            _name.text = snapshot.data?['name'];
-            _email.text = snapshot.data?['email'];
-            _password.text = snapshot.data?['password'];
-            _confirmationPassword.text = _password.text;
-            if(snapshot.data?['level'] != null)
-            {_level = Level.values[snapshot.data?['level']];}
-            if(snapshot.data?['gender'] != null)
-            {_gender = Gender.values[snapshot.data?['gender']];}
+            print(snapshot.data);
+             if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else {
+
+              if (_name.text.isEmpty) {
+                _name.text = snapshot.data?['name'];
+              }
+              if (_email.text.isEmpty) {
+                _email.text = snapshot.data?['email'];
+              }
+              if (_password.text.isEmpty) {
+                _password.text = snapshot.data?['password'];
+              }
+              if (_confirmationPassword.text.isEmpty) {
+                _confirmationPassword.text = _password.text;
+              }
+              if (_level == null) {
+                if (snapshot.data?['level'] != null) {
+                  _level = Level.values[snapshot.data?['level']];
+                }
+              }
+              if (_gender == null) {
+                if (snapshot.data?['gender'] != null) {
+                  _gender = Gender.values[snapshot.data?['gender']];
+                }
+              }
 
             return SingleChildScrollView(
                 child: Form(
@@ -214,9 +239,13 @@ class _ProfilePageState extends State<ProfilePage> {
                   SizedBox(height: 10),
                   ElevatedButton(onPressed: () {
                     updateData();
+                          Navigator.of(context)
+                              .pushReplacement(MaterialPageRoute(
+                            builder: (context) => ProfilePage(),
+            ));
                   }, child: Text("update")),
                 ])));
           }
-        ));
+  }));
   }
 }
