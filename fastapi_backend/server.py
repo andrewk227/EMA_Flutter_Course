@@ -1,5 +1,5 @@
-from fastapi import FastAPI , HTTPException , Header
-from validators import valid_email , valid_id ,valid_name , valid_password , equal , valid_user_creds , valid_user
+from fastapi import FastAPI , HTTPException 
+from validators import valid_email , valid_id ,valid_name , valid_password , equal , valid_user_creds , valid_user , valid_updated_user
 from sqlite import excute_insert_query , excute_select_query , excute_update_query
 from tokens import generate_token_expire_days , create_access_token , decode_token
 
@@ -19,12 +19,12 @@ def register(user:dict):
     if not valid_id(user['id']):
         raise HTTPException(status_code=400 , detail="Invalid User ID")
     
-    select_id_query = f"SELECT * FROM Students WHERE id = {user['id']};"
+    select_id_query = f"SELECT * FROM Students WHERE id = '{user['id']}';"
     rows = excute_select_query(select_id_query)
     if rows:
         raise HTTPException(status_code=400 , detail="User already exists")
 
-    select_email_query = f"SELECT * FROM Students WHERE email = {user['email']};"
+    select_email_query = f"SELECT * FROM Students WHERE email = '{user['email']}';"
     rows = excute_select_query(select_email_query)
     if rows:
         raise HTTPException(status_code=400 , detail="Email Already Exist")
@@ -58,7 +58,7 @@ def login(credentials:dict):
     if not valid_user_creds(credentials):
         raise HTTPException(status_code=400 , detail="Missing credentials")
 
-    login_query = f"SELECT * FROM Students WHERE id = {credentials['id']} AND password = {credentials['password']};"
+    login_query = f"SELECT * FROM Students WHERE id = '{credentials['id']}' AND password = '{credentials['password']}';"
     rows = excute_select_query(login_query)
 
     if rows:
@@ -72,8 +72,12 @@ def login(credentials:dict):
 
 @app.put("/user/update")
 def update(user:dict):
+    
+    data = decode_token(user['access_token'])
+    if not data:
+        raise HTTPException(status_code=403 ,detail="Your Auth Token has Expired, Please Login Again.")
 
-    if not valid_user(user):
+    if not valid_updated_user(user):
         raise HTTPException(status_code=400 , detail="Missing User Fields")
 
     if not valid_name(user['name']):
@@ -85,10 +89,15 @@ def update(user:dict):
     if not valid_email(user['email']):
         raise HTTPException(status_code=400 , detail="Invalid FCAI Email")
 
+    select_email_query = f"SELECT * FROM Students WHERE email = '{user['email']}' AND id NOT IN ('{data['id']}') ;"
+    rows = excute_select_query(select_email_query)
+    if rows:
+        raise HTTPException(status_code=400 , detail="Email Already Exist")
+
     gender = "NULL" if user['gender'] is None else user['gender']
     level = "NULL" if user['level'] is None else user['level']
 
-    update_query = f"UPDATE Students SET name = '{user['name']}' , email='{user['email']}' , gender = {gender} , level = {level} , password = '{user['password']}' WHERE id = '{user['id']}';"
+    update_query = f"UPDATE Students SET name = '{user['name']}' , email='{user['email']}' , gender = {gender} , level = {level} , password = '{user['password']}' WHERE id = '{data['id']}';"
 
     excute_update_query(update_query)
 
@@ -98,7 +107,7 @@ def update(user:dict):
 def get_user_data(token:dict):
     data = decode_token(token['access_token'])
     if not data:
-        return {}
+        raise HTTPException(status_code=403 ,detail="Your Auth Token has Expired, Please Login Again.")
 
     user_query = f"SELECT * FROM Students WHERE id = '{data['id']}'"
     rows = excute_select_query(user_query)[0]

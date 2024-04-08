@@ -7,6 +7,13 @@ def valid_user(user:dict):
             return False
     return True
 
+def valid_updated_user(user:dict):
+    mandatory_fields  = ['name' , 'email' , 'password' , 'gender' , 'level']
+    for field in mandatory_fields:
+        if field not in user:
+            return False
+    return True
+
 def valid_user_creds(credentials:dict):
     if "id" not in credentials or "password" not in credentials:
         return False
@@ -34,6 +41,4 @@ def valid_password(password:str):
     return True
 
 def equal(password:str , confirmation_password:str):
-    if password == confirmation_password:
-        return True
-    return False
+    return password == confirmation_password
