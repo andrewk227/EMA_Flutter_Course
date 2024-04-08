@@ -1,4 +1,4 @@
-from fastapi import FastAPI , HTTPException 
+from fastapi import FastAPI , HTTPException , Request
 from validators import valid_email , valid_id ,valid_name , valid_password , equal , valid_user_creds , valid_user , valid_updated_user
 from sqlite import excute_insert_query , excute_select_query , excute_update_query
 from tokens import generate_token_expire_days , create_access_token , decode_token
@@ -71,11 +71,12 @@ def login(credentials:dict):
 
 
 @app.put("/user/update")
-def update(user:dict):
-    
-    data = decode_token(user['access_token'])
+async def update(request:Request):
+    data = decode_token(request.headers.get('access_token'))
     if not data:
         raise HTTPException(status_code=403 ,detail="Your Auth Token has Expired, Please Login Again.")
+
+    user = await request.json()
 
     if not valid_updated_user(user):
         raise HTTPException(status_code=400 , detail="Missing User Fields")
@@ -104,8 +105,8 @@ def update(user:dict):
     return True
 
 @app.post("/user")
-def get_user_data(token:dict):
-    data = decode_token(token['access_token'])
+def get_user_data(request:Request):
+    data = decode_token(request.headers.get("access_token"))
     if not data:
         raise HTTPException(status_code=403 ,detail="Your Auth Token has Expired, Please Login Again.")
 

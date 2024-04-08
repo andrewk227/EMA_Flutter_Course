@@ -27,9 +27,7 @@ class _ProfilePageState extends State<ProfilePage> {
       throw Exception('Access token is null or not found');
     }
 
-    Map<String , dynamic>sentToken = {'access_token':token};
-
-    final response = await http.post(Uri.parse(apiUrl) , headers: {'Content-Type': 'application/json'}, body: jsonEncode(sentToken));
+    final response = await http.post(Uri.parse(apiUrl) , headers: {'Content-Type': 'application/json' , 'access_token':token});
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
