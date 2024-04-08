@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
-class LoginSuccessPage extends StatelessWidget {
+class LoginFailurePage extends StatelessWidget {
+  const LoginFailurePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -12,13 +14,13 @@ class LoginSuccessPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
-              Icons.check_circle,
+              Icons.warning_amber,
               size: 100,
               color: Colors.red,
             ),
             SizedBox(height: 20),
             Text(
-              'Login Failure!',
+              'Login Failure!!',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,

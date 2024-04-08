@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:learn_flutter/view/profile_page/profile.dart';
 
 class LoginSuccessPage extends StatelessWidget {
+  const LoginSuccessPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,12 +28,15 @@ class LoginSuccessPage extends StatelessWidget {
               ),
             ),
             SizedBox(height: 20),
-            // ElevatedButton(
-            //   onPressed: () {
-            //     Navigator.pop(context);
-            //   },
-            //   child: Text('Back to Login'),
-            // ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ProfilePage()),
+                );
+              },
+              child: Text('Go to your profile'),
+            ),
           ],
         ),
       ),

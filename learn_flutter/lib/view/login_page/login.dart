@@ -1,9 +1,8 @@
 import "package:flutter/material.dart";
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:learn_flutter/view/profile_page/profile.dart';
-
-
+import 'package:learn_flutter/view/login_page/login_failure.dart';
+import 'package:learn_flutter/view/login_page/login_success.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -15,14 +14,14 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final _idController = TextEditingController();
-  final _passwordController = TextEditingController() ;
+  final _passwordController = TextEditingController();
   final String HOST = 'http://192.168.1.13:8000';
 
   Future<void> postLoginData() async {
-  Map<String, dynamic> data = {
-    'id': _idController.text,
-    'password': _passwordController.text,
-  };
+    Map<String, dynamic> data = {
+      'id': _idController.text,
+      'password': _passwordController.text,
+    };
 
     try {
       final response = await http.post(
@@ -35,16 +34,23 @@ class _LoginPageState extends State<LoginPage> {
 
       if (response.statusCode == 200) {
         print('Logged in Successfully');
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => LoginSuccessPage()),
+        );
       } else {
         print('Failed to post data: ${response.statusCode}');
         print('${response.body}');
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => LoginFailurePage()),
+        );
       }
     } catch (e) {
       print('Error posting data: $e');
     }
-}
+  }
 
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,34 +65,33 @@ class _LoginPageState extends State<LoginPage> {
             child: Form(
                 key: _formKey,
                 child: Column(children: [
-          const Text(
-            "Login",
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          TextFormField(
-            controller: _idController,
-            decoration: const InputDecoration(
-            prefixIcon: Icon(Icons.person_2_outlined),
-            labelText: "Student ID",
-          )),
-          const SizedBox(
-            height: 10,
-          ),
-          TextFormField(
-            controller: _passwordController,
-              decoration: const InputDecoration(
-            prefixIcon: Icon(Icons.password_outlined),
-            labelText: "Password",
-          )),
-          const SizedBox(
-            height: 10,
-          ),
-          ElevatedButton(
-              onPressed:postLoginData,
-              child: const Text("Login")),
-        ]))));
+                  const Text(
+                    "Login",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  TextFormField(
+                      controller: _idController,
+                      decoration: const InputDecoration(
+                        prefixIcon: Icon(Icons.person_2_outlined),
+                        labelText: "Student ID",
+                      )),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  TextFormField(
+                      controller: _passwordController,
+                      decoration: const InputDecoration(
+                        prefixIcon: Icon(Icons.password_outlined),
+                        labelText: "Password",
+                      )),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  ElevatedButton(
+                      onPressed: postLoginData, child: const Text("Login")),
+                ]))));
   }
 }

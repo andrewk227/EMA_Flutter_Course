@@ -10,6 +10,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   Level? _level;
+  Gender? _gender;
 
   @override
   Widget build(BuildContext context) {
@@ -29,13 +30,13 @@ class _ProfilePageState extends State<ProfilePage> {
               Stack(
                 children: [
                   SizedBox(
-                    width: 120,
-                    height: 120,
-                    child: ClipRRect(
+                      width: 120,
+                      height: 120,
+                      child: ClipRRect(
                         borderRadius: BorderRadius.circular(100),
-                        child: const Image(
-                            image: AssetImage('assets/images/profile.png'))),
-                  ),
+                        // child: const Image(
+                        //     image: AssetImage('assets/images/profile.png'))),
+                      )),
                   Positioned(
                     bottom: 0,
                     right: 0,
@@ -59,42 +60,88 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
               SizedBox(height: 10),
-              RadioListTile(
-                  title: const Text("First Level"),
-                  value: Level.First,
-                  groupValue: _level,
-                  onChanged: (value) {
-                    setState(() {
-                      _level = value;
-                    });
-                  }),
-              RadioListTile(
-                  title: const Text("Second Level"),
-                  value: Level.Second,
-                  groupValue: _level,
-                  onChanged: (value) {
-                    setState(() {
-                      _level = value;
-                    });
-                  }),
-              RadioListTile(
-                  title: const Text("Third Level"),
-                  value: Level.Third,
-                  groupValue: _level,
-                  onChanged: (value) {
-                    setState(() {
-                      _level = value;
-                    });
-                  }),
-              RadioListTile(
-                  title: const Text("Fourth Level"),
-                  value: Level.Fourth,
-                  groupValue: _level,
-                  onChanged: (value) {
-                    setState(() {
-                      _level = value;
-                    });
-                  }),
+              Row(children: [
+                RadioListTile(
+                    title: const Text("Male"),
+                    value: Gender.Male,
+                    groupValue: _gender,
+                    onChanged: (value) {
+                      setState(() {
+                        _gender = value;
+                      });
+                    }),
+                RadioListTile(
+                    title: const Text("Female"),
+                    value: Gender.Female,
+                    groupValue: _gender,
+                    onChanged: (value) {
+                      setState(() {
+                        _gender = value;
+                      });
+                    }),
+              ]),
+              TextFormField(
+                decoration: const InputDecoration(
+                  prefixIcon: Icon(Icons.email),
+                  labelText: "email",
+                ),
+              ),
+              SizedBox(height: 10),
+              TextFormField(
+                decoration: const InputDecoration(
+                  prefixIcon: Icon(Icons.lock),
+                  labelText: "Password",
+                ),
+              ),
+              SizedBox(height: 10),
+              TextFormField(
+                decoration: const InputDecoration(
+                  prefixIcon: Icon(Icons.lock),
+                  labelText: "Confirm Password",
+                ),
+              ),
+              SizedBox(height: 10),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(children: [
+                  RadioListTile(
+                      title: const Text("First Level"),
+                      value: Level.First,
+                      groupValue: _level,
+                      onChanged: (value) {
+                        setState(() {
+                          _level = value;
+                        });
+                      }),
+                  RadioListTile(
+                      title: const Text("Second Level"),
+                      value: Level.Second,
+                      groupValue: _level,
+                      onChanged: (value) {
+                        setState(() {
+                          _level = value;
+                        });
+                      }),
+                  RadioListTile(
+                      title: const Text("Third Level"),
+                      value: Level.Third,
+                      groupValue: _level,
+                      onChanged: (value) {
+                        setState(() {
+                          _level = value;
+                        });
+                      }),
+                  RadioListTile(
+                      title: const Text("Fourth Level"),
+                      value: Level.Fourth,
+                      groupValue: _level,
+                      onChanged: (value) {
+                        setState(() {
+                          _level = value;
+                        });
+                      }),
+                ]),
+              ),
               SizedBox(height: 10),
               ElevatedButton(onPressed: () {}, child: Text("update")),
             ]))));
