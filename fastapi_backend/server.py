@@ -1,4 +1,5 @@
-from fastapi import FastAPI , HTTPException , Request
+from typing import Optional
+from fastapi import FastAPI , HTTPException , Header
 from validators import valid_email , valid_id ,valid_name , valid_password , equal , valid_user_creds , valid_user , valid_updated_user
 from sqlite import excute_insert_query , excute_select_query , excute_update_query
 from tokens import generate_token_expire_days , create_access_token , decode_token
@@ -6,12 +7,12 @@ from tokens import generate_token_expire_days , create_access_token , decode_tok
 app = FastAPI()
 
 @app.get("/")
-def home():
+async def home():
     return "Welcome to Flutter Assignment 1"
 
 
 @app.post("/user/register")
-def register(user:dict):
+async def register(user:dict):
 
     if not valid_user(user) or "confirmation_password" not in user:
         raise HTTPException(status_code=400 , detail="Missing Required Fields")
@@ -53,7 +54,7 @@ def register(user:dict):
     raise HTTPException(status_code=400 , detail="Password and Confirmation Password are not the same")
 
 @app.post("/user/login")
-def login(credentials:dict):
+async def login(credentials:dict):
 
     if not valid_user_creds(credentials):
         raise HTTPException(status_code=400 , detail="Missing credentials")
@@ -71,14 +72,12 @@ def login(credentials:dict):
 
 
 @app.put("/user/update")
-async def update(request:Request):
-    data = decode_token(request.headers.get('access_token'))
+async def update(user:dict , access_token:Optional[str] = Header(None)):
+    data = decode_token(access_token)
     if not data:
         raise HTTPException(status_code=403 ,detail="Your Auth Token has Expired, Please Login Again.")
 
-    user = await request.json()
-
-    if not valid_updated_user(user):
+    if not valid_updated_user(user) or "confirmation_password" not in user:
         raise HTTPException(status_code=400 , detail="Missing User Fields")
 
     if not valid_name(user['name']):
@@ -104,9 +103,9 @@ async def update(request:Request):
 
     return True
 
-@app.post("/user")
-def get_user_data(request:Request):
-    data = decode_token(request.headers.get("access_token"))
+@app.get("/user")
+def get_user_data(access_token:Optional[str]= Header(None)):
+    data = decode_token(access_token)
     if not data:
         raise HTTPException(status_code=403 ,detail="Your Auth Token has Expired, Please Login Again.")
 

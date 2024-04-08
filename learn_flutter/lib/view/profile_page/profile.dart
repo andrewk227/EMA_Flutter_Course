@@ -14,6 +14,11 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   final _name = TextEditingController();
+  final _email = TextEditingController();
+  final _password = TextEditingController();
+  final _confirmationPassword = TextEditingController();
+
+
   Level? _level;
   Gender? _gender;
   final String HOST = 'http://192.168.1.13:8000';
@@ -27,7 +32,7 @@ class _ProfilePageState extends State<ProfilePage> {
       throw Exception('Access token is null or not found');
     }
 
-    final response = await http.post(Uri.parse(apiUrl) , headers: {'Content-Type': 'application/json' , 'access_token':token});
+    final response = await http.get(Uri.parse(apiUrl) , headers: {'Content-Type': 'application/json' , 'access-token':token});
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
@@ -35,8 +40,37 @@ class _ProfilePageState extends State<ProfilePage> {
       throw Exception('Failed to load data');
     }
   }
+  Future<Map<String,dynamic>> updateData() async {
+    // API endpoint to fetch data
+    final String apiUrl = '$HOST/user/update';
+    String? token = await storage.read(key: 'access_token');
+    if (token == null) {
+      throw Exception('Access token is null or not found');
+    }
+    
+    Map<String, dynamic> data = {
+      'name': _name.text,
+      'email': _email.text,
+      'gender': _gender?.index,
+      'level': _level?.index,
+      'password': _password.text,
+      'confirmation_password': _confirmationPassword.text
+    };
+
+    final response = await http.put(Uri.parse(apiUrl) , headers: {'Content-Type': 'application/json' , 'access-token':token} , body: jsonEncode(data));
+
+    if (response.statusCode == 200) {
+      print("SUCCESS");
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('Failed to load data');
+    }
+  }
+
+
 
   @override
+
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
@@ -50,7 +84,15 @@ class _ProfilePageState extends State<ProfilePage> {
           future: fetchData(),
           builder: (context ,snapshot) {
             print(snapshot.data);
+
             _name.text = snapshot.data?['name'];
+            _email.text = snapshot.data?['email'];
+            _password.text = snapshot.data?['password'];
+            _confirmationPassword.text = _password.text;
+            if(snapshot.data?['level'] != null)
+            {_level = Level.values[snapshot.data?['level']];}
+            if(snapshot.data?['gender'] != null)
+            {_gender = Gender.values[snapshot.data?['gender']];}
 
             return SingleChildScrollView(
                 child: Form(
@@ -110,6 +152,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           });
                         }),
                   TextFormField(
+                    controller: _email,
                     decoration: const InputDecoration(
                       prefixIcon: Icon(Icons.email),
                       labelText: "email",
@@ -117,6 +160,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   SizedBox(height: 10),
                   TextFormField(
+                    controller: _password,
                     decoration: const InputDecoration(
                       prefixIcon: Icon(Icons.lock),
                       labelText: "Password",
@@ -124,6 +168,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   SizedBox(height: 10),
                   TextFormField(
+                    controller: _confirmationPassword,
                     decoration: const InputDecoration(
                       prefixIcon: Icon(Icons.lock),
                       labelText: "Confirm Password",
@@ -167,7 +212,9 @@ class _ProfilePageState extends State<ProfilePage> {
                             });
                           }),
                   SizedBox(height: 10),
-                  ElevatedButton(onPressed: () {}, child: Text("update")),
+                  ElevatedButton(onPressed: () {
+                    updateData();
+                  }, child: Text("update")),
                 ])));
           }
         ));
