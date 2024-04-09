@@ -80,7 +80,8 @@ class _ProfilePageState extends State<ProfilePage> {
       'gender': _gender?.index,
       'level': _level?.index,
       'password': _password.text,
-      'confirmation_password': _confirmationPassword.text
+      'confirmation_password': _confirmationPassword.text,
+      'imageURL': _imageFile?.path
     };
 
     final response = await http.put(Uri.parse(apiUrl),
@@ -150,6 +151,10 @@ class _ProfilePageState extends State<ProfilePage> {
                   }
                 }
 
+                if(_imageFile == null) {
+                  _imageFile = snapshot.data?['imageURL'] != null ?File(snapshot.data?['imageURL']) : null;
+                }
+                
                 return SingleChildScrollView(
                     child: Form(
                         key: _formKey,

@@ -12,10 +12,11 @@ import sqlite3
 CREATE TABLE Students ( 
 id VARCHAR(9) NOT NULL,
 name VARCHAR(50) NOT NULL ,
-email VARCHAR(30) NOT NULL,
+email VARCHAR(30) NOT NULL UNIQUE,
 gender INTEGER NULL, 
 level INTEGER NULL,
 password VARCHAR(50) NOT NULL,
+imageURL TEXT,
  PRIMARY KEY(id)
 );
 

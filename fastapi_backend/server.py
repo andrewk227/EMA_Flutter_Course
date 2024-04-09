@@ -42,7 +42,7 @@ async def register(user:dict):
     gender = "NULL" if user['gender'] is None else user['gender']
     level = "NULL" if user['level'] is None else user['level']
 
-    insert_query = f"INSERT INTO Students VALUES ('{user['id']}' , '{ user['name']}' , '{user['email']}' , {gender} , {level} , '{user['password']}' );"
+    insert_query = f"INSERT INTO Students VALUES ('{user['id']}' , '{ user['name']}' , '{user['email']}' , {gender} , {level} , '{user['password']}' , '{user['imageURL']}' );"
 
     if equal(user['password'] , user['confirmation_password']):
         excute_insert_query(insert_query)
@@ -97,7 +97,7 @@ async def update(user:dict , access_token:Optional[str] = Header(None)):
     gender = "NULL" if user['gender'] is None else user['gender']
     level = "NULL" if user['level'] is None else user['level']
 
-    update_query = f"UPDATE Students SET name = '{user['name']}' , email='{user['email']}' , gender = {gender} , level = {level} , password = '{user['password']}' WHERE id = '{data['id']}';"
+    update_query = f"UPDATE Students SET name = '{user['name']}' , email='{user['email']}' , gender = {gender} , level = {level} , password = '{user['password']}' , imageURL = '{user['imageURL']}' WHERE id = '{data['id']}';"
 
     excute_update_query(update_query)
 
@@ -111,6 +111,6 @@ def get_user_data(access_token:Optional[str]= Header(None)):
 
     user_query = f"SELECT * FROM Students WHERE id = '{data['id']}'"
     rows = excute_select_query(user_query)[0]
-    keys = ['id' , 'name' , 'email' , 'gender' , 'level' , 'password']
+    keys = ['id' , 'name' , 'email' , 'gender' , 'level' , 'password' , 'imageURL']
     user = dict(zip(keys , rows))
     return user

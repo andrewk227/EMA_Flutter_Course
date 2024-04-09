@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:learn_flutter/view/login_page/login_failure.dart';
 import 'package:learn_flutter/view/login_page/login_success.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:learn_flutter/view/register_page/register.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -109,14 +110,30 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(
                     height: 10,
                   ),
-                  ElevatedButton(
-                      onPressed: (){
-                        if(_formKey.currentState!.validate())
-                        {
-                          _formKey.currentState!.save();
-                          postLoginData();
-                        }
-                        }, child: const Text("Login")),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                          ElevatedButton(
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              _formKey.currentState!.save();
+                              postLoginData();
+                            }
+                          },
+                          child: const Text("Login")),
+                      SizedBox(width: 10),
+                      ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => RegisterPage()),
+                            );
+                          },
+                          child: const Text("Register"))
+                    ],
+                  ),
+                  
                 ]))));
   }
 }

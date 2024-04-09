@@ -38,7 +38,8 @@ class _RegisterPageState extends State<RegisterPage> {
       'gender': _gender?.index,
       'level': _level?.index,
       'password': _passwordController.text,
-      'confirmation_password': _confirmationPasswordController.text
+      'confirmation_password': _confirmationPasswordController.text,
+      'imageURL':null
     };
 
     try {
@@ -54,6 +55,8 @@ class _RegisterPageState extends State<RegisterPage> {
         Map<String, dynamic> responseJson = jsonDecode(response.body);
         await storage.write(
             key: 'access_token', value: responseJson['access_token']);
+          
+        print("REGISTERED");
       } else {
         print('Failed to post data: ${response.statusCode}');
         print('${response.body}');
