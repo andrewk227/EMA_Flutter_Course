@@ -15,7 +15,7 @@ class sqliteDB{
   initialDB() async {
     String databasePath = await getDatabasesPath();
     String path = join(databasePath , 'flutter.db');
-    Database db = await openDatabase(path , onCreate: _onCreate , version: 1);
+    Database db = await openDatabase(path , onCreate: _onCreate , version: 3);
     return db;
   }
 
@@ -27,7 +27,8 @@ class sqliteDB{
         "email" TEXT UNIQUE,
         "password" TEXT,
         "gender" INTEGER,
-        "level" INTEGER
+        "level" INTEGER,
+        "imageURL" TEXT DEFAULT null
       );
 ''');
 print("DB CREATED!");
@@ -48,6 +49,12 @@ print("DB CREATED!");
   updateData(String query) async {
     Database? localDB = await getDB;
     int? response = await localDB?.rawUpdate(query);
+    return response;
+  }
+
+  dropDatabase(String query) async{
+    Database? localDB = await getDB;
+    var response = await localDB?.rawQuery("DROP TABLE Students;");
     return response;
   }
 }

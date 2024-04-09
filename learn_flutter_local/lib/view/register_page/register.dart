@@ -232,7 +232,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           int? level = _level?.index;
 
                           String insertQuery =
-                              "INSERT INTO Students VALUES ('$id' , '$name' , '$email' ,'$password', '$gender' , '$level');";
+                              "INSERT INTO Students VALUES ('$id' , '$name' , '$email' ,'$password', '$gender' , '$level' , 'null');";
                           print(
                               "=================================================");
                           print(insertQuery);

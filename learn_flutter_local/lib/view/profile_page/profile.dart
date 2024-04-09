@@ -37,8 +37,10 @@ class _ProfilePageState extends State<ProfilePage> {
       final imageFile = File(pickedFile.path);
       setState(() {
         _imageFile = imageFile;
+        print(_imageFile?.path);
       });
     }
+
   }
 
   Future<Map<String, dynamic>> fetchData() async {
@@ -98,6 +100,10 @@ class _ProfilePageState extends State<ProfilePage> {
                   if (snapshot.data?['gender'] != null) {
                     _gender = Gender.values[snapshot.data?['gender']];
                   }
+                }
+
+                if(_imageFile == null) {
+                  _imageFile = snapshot.data?['imageURL'] != null ?File(snapshot.data?['imageURL']) : null;
                 }
 
                 return SingleChildScrollView(
@@ -278,10 +284,12 @@ class _ProfilePageState extends State<ProfilePage> {
                                       } else {
                                         _formKey.currentState!.save();
 
+                                        String path = _imageFile!.path;
                                         String updateQuery =
-                                            "UPDATE Students SET name='$name' ,email='$email' , password = '$password' , gender = '$gender' , level = '$level' WHERE id = '$id'";
+                                            "UPDATE Students SET name='$name' ,email='$email' , password = '$password' , gender = '$gender' , level = '$level' , imageURL = '$path' WHERE id = '$id'";
                                         var res =
                                             await db.updateData(updateQuery);
+
                                         print(res);
                                         Navigator.of(context)
                                             .pushReplacement(MaterialPageRoute(
