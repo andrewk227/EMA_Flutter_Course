@@ -18,6 +18,7 @@ class _ProfilePageState extends State<ProfilePage> {
   final _password = TextEditingController();
   final _confirmationPassword = TextEditingController();
   late Future _future;
+  final _formKey = GlobalKey<FormState>();
 
   Level? _level;
   Gender? _gender;
@@ -121,6 +122,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
             return SingleChildScrollView(
                 child: Form(
+                  key: _formKey,
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
@@ -151,6 +153,12 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   const SizedBox(height: 30),
                   TextFormField(
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "This Field is mandatory";
+                          }
+                          return null;
+                        },
                     controller: _name,
                     decoration: const InputDecoration(
                       prefixIcon: Icon(Icons.person_2_outlined),
@@ -177,6 +185,16 @@ class _ProfilePageState extends State<ProfilePage> {
                           });
                         }),
                   TextFormField(
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "This Field is mandatory";
+                          }
+                          RegExp exp = RegExp(r'(\d{8}@stud.fci-cu.edu.eg)');
+                          if (exp.hasMatch(value)) {
+                            return null;
+                          }
+                          return "Invalid Email";
+                        },
                     controller: _email,
                     decoration: const InputDecoration(
                       prefixIcon: Icon(Icons.email),
@@ -185,6 +203,15 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   SizedBox(height: 10),
                   TextFormField(
+                        validator: (value) {
+                          if (value == null || value.length < 8) {
+                            return "Require atleast 8 Characters";
+                          }
+                          return null;
+                        },
+                        obscureText: true,
+                        enableSuggestions: false,
+                        autocorrect: false,
                     controller: _password,
                     decoration: const InputDecoration(
                       prefixIcon: Icon(Icons.lock),
@@ -193,6 +220,18 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   SizedBox(height: 10),
                   TextFormField(
+                        validator: (value) {
+                          if (value == null || value.length < 8) {
+                            return "Require atleast 8 Characters";
+                          }
+                          if (value != _password.text) {
+                            return "Confirmation password doesn't match the password";
+                          }
+                          return null;
+                        },
+                        obscureText: true,
+                        enableSuggestions: false,
+                        autocorrect: false,
                     controller: _confirmationPassword,
                     decoration: const InputDecoration(
                       prefixIcon: Icon(Icons.lock),
@@ -238,12 +277,15 @@ class _ProfilePageState extends State<ProfilePage> {
                           }),
                   SizedBox(height: 10),
                   ElevatedButton(onPressed: () {
-                    updateData();
-                          Navigator.of(context)
-                              .pushReplacement(MaterialPageRoute(
-                            builder: (context) => ProfilePage(),
-            ));
-                  }, child: Text("update")),
+                                    if (_formKey.currentState!.validate()) {
+                                      _formKey.currentState!.save();
+                                      updateData();
+                                      Navigator.of(context)
+                                          .pushReplacement(MaterialPageRoute(
+                                        builder: (context) => ProfilePage(),
+                                      ));
+                                    }
+                  }, child: const Text("update")),
                 ])));
           }
   }));

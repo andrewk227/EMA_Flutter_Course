@@ -77,6 +77,12 @@ class _LoginPageState extends State<LoginPage> {
                     height: 10,
                   ),
                   TextFormField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "This Field is Mandatory";
+                        }
+                        return null;
+                      },
                       controller: _idController,
                       decoration: const InputDecoration(
                         prefixIcon: Icon(Icons.person_2_outlined),
@@ -86,7 +92,16 @@ class _LoginPageState extends State<LoginPage> {
                     height: 10,
                   ),
                   TextFormField(
+                      validator: (value) {
+                        if (value == null || value.length < 8) {
+                          return "Require atleast 8 Characters";
+                        }
+                        return null;
+                      },
                       controller: _passwordController,
+                      obscureText:true,
+                      enableSuggestions: false,
+                      autocorrect: false,
                       decoration: const InputDecoration(
                         prefixIcon: Icon(Icons.password_outlined),
                         labelText: "Password",
@@ -95,7 +110,13 @@ class _LoginPageState extends State<LoginPage> {
                     height: 10,
                   ),
                   ElevatedButton(
-                      onPressed: postLoginData, child: const Text("Login")),
+                      onPressed: (){
+                        if(_formKey.currentState!.validate())
+                        {
+                          _formKey.currentState!.save();
+                          postLoginData();
+                        }
+                        }, child: const Text("Login")),
                 ]))));
   }
 }
