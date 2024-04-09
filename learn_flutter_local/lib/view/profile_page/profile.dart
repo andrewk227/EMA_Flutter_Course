@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:learn_flutter/sqlite.dart';
 import 'package:learn_flutter/view/profile_page/image_piciking.dart';
 import 'package:learn_flutter/view/register_page/register.dart';
@@ -22,12 +23,23 @@ class _ProfilePageState extends State<ProfilePage> {
   final _formKey = GlobalKey<FormState>();
   sqliteDB db = sqliteDB();
 
+
   Level? _level;
   Gender? _gender;
   final String HOST = 'http://192.168.1.13:8000';
   final storage = FlutterSecureStorage();
   File? _imageFile;
 
+// Future<void> _pickImage(ImageSource source) async {
+//     final picker = ImagePicker();
+//     final pickedFile = await picker.getImage(source: source);
+
+//     setState(() {
+//       if (pickedFile != null) {
+//         _imageFile = File(pickedFile.path);
+//       }
+//     });
+//   }
   Future<Map<String, dynamic>> fetchData() async {
     var userID = widget.userID;
     String selectQuery = "SELECT * FROM Students WHERE id = '$userID'";
@@ -98,7 +110,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   radius: 60,
                                   backgroundImage: _imageFile != null
                                       ? FileImage(_imageFile!)
-                                      : AssetImage(
+                                      : const AssetImage(
                                           'assets/default.png',
                                         ) as ImageProvider<Object>?),
                               const SizedBox(height: 10),
@@ -107,7 +119,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                 children: [
                                   ElevatedButton(
                                       onPressed: () {
-                                        pickImageFromCamera();
+                                        setState(() async {
+                                        _imageFile = await pickImageFromCamera();
+                                        });
                                       },
                                       child: Text("Camera")),
                                   SizedBox(
@@ -115,7 +129,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                   ),
                                   ElevatedButton(
                                       onPressed: () {
-                                        pickImageFromGallery();
+                                        setState(() async {
+                                        _imageFile = await pickImageFromGallery();     
+                                        });
                                       },
                                       child: Text("Gallery")),
                                 ],
