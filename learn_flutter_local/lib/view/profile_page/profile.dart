@@ -1,10 +1,9 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:learn_flutter/sqlite.dart';
 import 'package:learn_flutter/view/profile_page/image_piciking.dart';
-// import 'package:learn_flutter/view/login_page/login.dart';
 import 'package:learn_flutter/view/register_page/register.dart';
-import 'package:http/http.dart' as http;
 
 class ProfilePage extends StatefulWidget {
   final userID;
@@ -27,6 +26,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Gender? _gender;
   final String HOST = 'http://192.168.1.13:8000';
   final storage = FlutterSecureStorage();
+  File? _imageFile;
 
   Future<Map<String, dynamic>> fetchData() async {
     var userID = widget.userID;
@@ -94,37 +94,30 @@ class _ProfilePageState extends State<ProfilePage> {
                         child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Stack(
+                              CircleAvatar(
+                                  radius: 60,
+                                  backgroundImage: _imageFile != null
+                                      ? FileImage(_imageFile!)
+                                      : AssetImage(
+                                          'assets/default.png',
+                                        ) as ImageProvider<Object>?),
+                              const SizedBox(height: 10),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
+                                  ElevatedButton(
+                                      onPressed: () {
+                                        pickImageFromCamera();
+                                      },
+                                      child: Text("Camera")),
                                   SizedBox(
-                                    width: 120,
-                                    height: 120,
-                                    child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(100),
-                                        child: const Image(
-                                            image: AssetImage(
-                                                'assets/images/profile.png'))),
+                                    width: 10,
                                   ),
-                                  Positioned(
-                                    bottom: 0,
-                                    right: 0,
-                                    child: Container(
-                                      width: 35,
-                                      height: 35,
-                                      decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(100),
-                                      ),
-                                      child: IconButton(
-                                          onPressed: () {
-                                            pickImageFromCamera();
-                                          },
-                                          icon: Icon(Icons.camera_alt),
-                                          color: Colors.white,
-                                          iconSize: 20),
-                                    ),
-                                  ),
+                                  ElevatedButton(
+                                      onPressed: () {
+                                        pickImageFromGallery();
+                                      },
+                                      child: Text("Gallery")),
                                 ],
                               ),
                               const SizedBox(height: 30),
