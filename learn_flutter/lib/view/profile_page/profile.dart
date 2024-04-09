@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:learn_flutter/view/login_page/login.dart';
 import 'package:learn_flutter/view/register_page/register.dart';
 import 'package:http/http.dart' as http;
 
@@ -37,6 +38,12 @@ class _ProfilePageState extends State<ProfilePage> {
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body);
+    } else if (response.statusCode == 403) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => LoginPage()),
+      );
+      return {};
     } else {
       throw Exception('Failed to load data');
     }
@@ -63,6 +70,12 @@ class _ProfilePageState extends State<ProfilePage> {
     if (response.statusCode == 200) {
       print("SUCCESS");
       return jsonDecode(response.body);
+    } else if (response.statusCode == 403) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => LoginPage()),
+      );
+      return {};
     } else {
       throw Exception('Failed to load data');
     }
