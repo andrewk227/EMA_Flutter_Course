@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class LoginFailurePage extends StatelessWidget {
-  const LoginFailurePage({super.key});
+class RegisterationFailurePage extends StatelessWidget {
+  const RegisterationFailurePage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Login Failed'),
+        title: Text('Registeration Failed'),
       ),
       body: Center(
         child: Column(
@@ -20,7 +20,7 @@ class LoginFailurePage extends StatelessWidget {
             ),
             SizedBox(height: 20),
             Text(
-              'Login Failure!!',
+              'Registeration Failure!!',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,

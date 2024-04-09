@@ -3,6 +3,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:learn_flutter/sqlite.dart';
+import 'package:learn_flutter/view/register_page/registeration_failure.dart';
+import 'package:learn_flutter/view/register_page/registeration_success.dart';
 
 enum Gender { Male, Female }
 
@@ -29,7 +31,6 @@ class _RegisterPageState extends State<RegisterPage> {
   sqliteDB db = sqliteDB();
 
   final String HOST = 'http://192.168.1.13:8000';
-
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +93,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     });
                   }),
               TextFormField(
-                controller:_emailController,
+                controller: _emailController,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return "This Field is mandatory";
@@ -206,34 +207,49 @@ class _RegisterPageState extends State<RegisterPage> {
               Center(
                 child: ElevatedButton(
                     onPressed: () async {
-                      if (_formKey.currentState!.validate()) 
-                      {
+                      if (_formKey.currentState!.validate()) {
                         String id = _idController.text;
                         String email = _emailController.text;
-                        String selectID = "SELECT * FROM Students WHERE id = '$id';";  
-                        String selectEmail = "SELECT * FROM Students WHERE email = '$email';";  
+                        String selectID =
+                            "SELECT * FROM Students WHERE id = '$id';";
+                        String selectEmail =
+                            "SELECT * FROM Students WHERE email = '$email';";
 
-                        var ids =  await db.selectData(selectID);
-                        var emails = await db.selectData(selectEmail); 
+                        var ids = await db.selectData(selectID);
+                        var emails = await db.selectData(selectEmail);
 
-                        if (ids.length > 0 || emails.length > 0)
-                        {
-                          print("Registeration Failed");
-                        }
-                        else{
+                        if (ids.length > 0 || emails.length > 0) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    RegisterationFailurePage()),
+                          );
+                        } else {
                           String name = _nameController.text;
                           String password = _passwordController.text;
-                          int? gender = _gender?.index ;
-                          int? level = _level?.index ;
+                          int? gender = _gender?.index;
+                          int? level = _level?.index;
 
-                          String insertQuery = "INSERT INTO Students VALUES ('$id' , '$name' , '$email' ,'$password', '$gender' , '$level');";
-                          print("=================================================");
+                          String insertQuery =
+                              "INSERT INTO Students VALUES ('$id' , '$name' , '$email' ,'$password', '$gender' , '$level');";
+                          print(
+                              "=================================================");
                           print(insertQuery);
-                          print("=================================================");
+                          print(
+                              "=================================================");
                           var res = await db.insertData(insertQuery);
                           print("INSERTED DATA");
-                          print("=================================================");
+                          print(
+                              "=================================================");
                           print(res);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => RegisterSuccessPage(
+                                      userID: id,
+                                    )),
+                          );
                         }
                       }
                     },

@@ -1,26 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:learn_flutter/view/profile_page/profile.dart';
 
-class LoginFailurePage extends StatelessWidget {
-  const LoginFailurePage({super.key});
+class RegisterSuccessPage extends StatelessWidget {
+  final userID;
+  const RegisterSuccessPage({super.key, required this.userID});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Login Failed'),
+        title: Text('Registeration Success'),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
-              Icons.warning_amber,
+              Icons.check_circle,
               size: 100,
-              color: Colors.red,
+              color: Colors.green,
             ),
             SizedBox(height: 20),
             Text(
-              'Login Failure!!',
+              'Registeration Successful!',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -29,9 +31,15 @@ class LoginFailurePage extends StatelessWidget {
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ProfilePage(
+                            userID: userID,
+                          )),
+                );
               },
-              child: Text('Back to Login'),
+              child: Text('Go to your profile'),
             ),
           ],
         ),

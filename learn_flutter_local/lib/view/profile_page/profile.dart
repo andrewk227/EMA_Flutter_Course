@@ -1,15 +1,14 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:learn_flutter/sqlite.dart';
-import 'package:learn_flutter/view/login_page/login.dart';
+import 'package:learn_flutter/view/profile_page/image_piciking.dart';
+// import 'package:learn_flutter/view/login_page/login.dart';
 import 'package:learn_flutter/view/register_page/register.dart';
 import 'package:http/http.dart' as http;
 
 class ProfilePage extends StatefulWidget {
   final userID;
-  const ProfilePage({super.key,required  this.userID});
+  const ProfilePage({super.key, required this.userID});
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -28,9 +27,8 @@ class _ProfilePageState extends State<ProfilePage> {
   Gender? _gender;
   final String HOST = 'http://192.168.1.13:8000';
   final storage = FlutterSecureStorage();
-  
 
-  Future<Map<String,dynamic>> fetchData() async {
+  Future<Map<String, dynamic>> fetchData() async {
     var userID = widget.userID;
     String selectQuery = "SELECT * FROM Students WHERE id = '$userID'";
     var res = await db.selectData(selectQuery);
@@ -41,7 +39,7 @@ class _ProfilePageState extends State<ProfilePage> {
     // API endpoint to fetch data
   }
 
- @override
+  @override
   void initState() {
     // assign this variable your Future
     _future = fetchData();
@@ -49,7 +47,6 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   @override
-
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
@@ -59,214 +56,221 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           backgroundColor: Theme.of(context).primaryColor,
         ),
-        body:FutureBuilder(
-          future: _future,
-          builder: (context ,snapshot) {
-
-            print(snapshot.data);
-             if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else {
-
-              if (_name.text.isEmpty) {
-                _name.text = snapshot.data?['name'];
-              }
-              if (_email.text.isEmpty) {
-                _email.text = snapshot.data?['email'];
-              }
-              if (_password.text.isEmpty) {
-                _password.text = snapshot.data?['password'];
-              }
-              if (_confirmationPassword.text.isEmpty) {
-                _confirmationPassword.text = _password.text;
-              }
-              if (_level == null) {
-                if (snapshot.data?['level'] != null) {
-                  _level = Level.values[snapshot.data?['level']];
+        body: FutureBuilder(
+            future: _future,
+            builder: (context, snapshot) {
+              print(snapshot.data);
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              } else {
+                if (_name.text.isEmpty) {
+                  _name.text = snapshot.data?['name'];
                 }
-              }
-              if (_gender == null) {
-                if (snapshot.data?['gender'] != null) {
-                  _gender = Gender.values[snapshot.data?['gender']];
+                if (_email.text.isEmpty) {
+                  _email.text = snapshot.data?['email'];
                 }
-              }
+                if (_password.text.isEmpty) {
+                  _password.text = snapshot.data?['password'];
+                }
+                if (_confirmationPassword.text.isEmpty) {
+                  _confirmationPassword.text = _password.text;
+                }
+                if (_level == null) {
+                  if (snapshot.data?['level'] != null) {
+                    _level = Level.values[snapshot.data?['level']];
+                  }
+                }
+                if (_gender == null) {
+                  if (snapshot.data?['gender'] != null) {
+                    _gender = Gender.values[snapshot.data?['gender']];
+                  }
+                }
 
-            return SingleChildScrollView(
-                child: Form(
-                  key: _formKey,
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                  Stack(
-                    children: [
-                      SizedBox(
-                          width: 120,
-                          height: 120,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(100),
-                            // child: const Image(
-                            //     image: AssetImage('assets/images/profile.png'))),
-                          )),
-                      Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: Container(
-                          width: 35,
-                          height: 35,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(100),
-                          ),
-                          child: const Icon(Icons.camera_alt,
-                              color: Colors.white, size: 20),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 30),
-                  TextFormField(
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "This Field is mandatory";
-                          }
-                          return null;
-                        },
-                    controller: _name,
-                    decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.person_2_outlined),
-                      labelText: "Name",
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  RadioListTile(
-                        title: const Text("Male"),
-                        value: Gender.Male,
-                        groupValue: _gender,
-                        onChanged: (value) {
-                          setState(() {
-                            _gender = value;
-                          });
-                        }),
-                    RadioListTile(
-                        title: const Text("Female"),
-                        value: Gender.Female,
-                        groupValue: _gender,
-                        onChanged: (value) {
-                          setState(() {
-                            _gender = value;
-                          });
-                        }),
-                  TextFormField(
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "This Field is mandatory";
-                          }
-                          RegExp exp = RegExp(r'(\d{8}@stud.fci-cu.edu.eg)');
-                          if (exp.hasMatch(value)) {
-                            return null;
-                          }
-                          return "Invalid Email";
-                        },
-                    controller: _email,
-                    decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.email),
-                      labelText: "email",
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  TextFormField(
-                        validator: (value) {
-                          if (value == null || value.length < 8) {
-                            return "Require atleast 8 Characters";
-                          }
-                          return null;
-                        },
-                        obscureText: true,
-                        enableSuggestions: false,
-                        autocorrect: false,
-                    controller: _password,
-                    decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.lock),
-                      labelText: "Password",
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  TextFormField(
-                        validator: (value) {
-                          if (value == null || value.length < 8) {
-                            return "Require atleast 8 Characters";
-                          }
-                          if (value != _password.text) {
-                            return "Confirmation password doesn't match the password";
-                          }
-                          return null;
-                        },
-                        obscureText: true,
-                        enableSuggestions: false,
-                        autocorrect: false,
-                    controller: _confirmationPassword,
-                    decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.lock),
-                      labelText: "Confirm Password",
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  RadioListTile(
-                          title: const Text("First Level"),
-                          value: Level.First,
-                          groupValue: _level,
-                          onChanged: (value) {
-                            setState(() {
-                              _level = value;
-                            });
-                          }),
-                      RadioListTile(
-                          title: const Text("Second Level"),
-                          value: Level.Second,
-                          groupValue: _level,
-                          onChanged: (value) {
-                            setState(() {
-                              _level = value;
-                            });
-                          }),
-                      RadioListTile(
-                          title: const Text("Third Level"),
-                          value: Level.Third,
-                          groupValue: _level,
-                          onChanged: (value) {
-                            setState(() {
-                              _level = value;
-                            });
-                          }),
-                      RadioListTile(
-                          title: const Text("Fourth Level"),
-                          value: Level.Fourth,
-                          groupValue: _level,
-                          onChanged: (value) {
-                            setState(() {
-                              _level = value;
-                            });
-                          }),
-                  SizedBox(height: 10),
-                  ElevatedButton(onPressed: () async {
+                return SingleChildScrollView(
+                    child: Form(
+                        key: _formKey,
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Stack(
+                                children: [
+                                  SizedBox(
+                                    width: 120,
+                                    height: 120,
+                                    child: ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(100),
+                                        child: const Image(
+                                            image: AssetImage(
+                                                'assets/images/profile.png'))),
+                                  ),
+                                  Positioned(
+                                    bottom: 0,
+                                    right: 0,
+                                    child: Container(
+                                      width: 35,
+                                      height: 35,
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(100),
+                                      ),
+                                      child: IconButton(
+                                          onPressed: () {
+                                            pickImageFromCamera();
+                                          },
+                                          icon: Icon(Icons.camera_alt),
+                                          color: Colors.white,
+                                          iconSize: 20),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 30),
+                              TextFormField(
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return "This Field is mandatory";
+                                  }
+                                  return null;
+                                },
+                                controller: _name,
+                                decoration: const InputDecoration(
+                                  prefixIcon: Icon(Icons.person_2_outlined),
+                                  labelText: "Name",
+                                ),
+                              ),
+                              SizedBox(height: 10),
+                              RadioListTile(
+                                  title: const Text("Male"),
+                                  value: Gender.Male,
+                                  groupValue: _gender,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _gender = value;
+                                    });
+                                  }),
+                              RadioListTile(
+                                  title: const Text("Female"),
+                                  value: Gender.Female,
+                                  groupValue: _gender,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _gender = value;
+                                    });
+                                  }),
+                              TextFormField(
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return "This Field is mandatory";
+                                  }
+                                  RegExp exp =
+                                      RegExp(r'(\d{8}@stud.fci-cu.edu.eg)');
+                                  if (exp.hasMatch(value)) {
+                                    return null;
+                                  }
+                                  return "Invalid Email";
+                                },
+                                controller: _email,
+                                decoration: const InputDecoration(
+                                  prefixIcon: Icon(Icons.email),
+                                  labelText: "email",
+                                ),
+                              ),
+                              SizedBox(height: 10),
+                              TextFormField(
+                                validator: (value) {
+                                  if (value == null || value.length < 8) {
+                                    return "Require atleast 8 Characters";
+                                  }
+                                  return null;
+                                },
+                                obscureText: true,
+                                enableSuggestions: false,
+                                autocorrect: false,
+                                controller: _password,
+                                decoration: const InputDecoration(
+                                  prefixIcon: Icon(Icons.lock),
+                                  labelText: "Password",
+                                ),
+                              ),
+                              SizedBox(height: 10),
+                              TextFormField(
+                                validator: (value) {
+                                  if (value == null || value.length < 8) {
+                                    return "Require atleast 8 Characters";
+                                  }
+                                  if (value != _password.text) {
+                                    return "Confirmation password doesn't match the password";
+                                  }
+                                  return null;
+                                },
+                                obscureText: true,
+                                enableSuggestions: false,
+                                autocorrect: false,
+                                controller: _confirmationPassword,
+                                decoration: const InputDecoration(
+                                  prefixIcon: Icon(Icons.lock),
+                                  labelText: "Confirm Password",
+                                ),
+                              ),
+                              SizedBox(height: 10),
+                              RadioListTile(
+                                  title: const Text("First Level"),
+                                  value: Level.First,
+                                  groupValue: _level,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _level = value;
+                                    });
+                                  }),
+                              RadioListTile(
+                                  title: const Text("Second Level"),
+                                  value: Level.Second,
+                                  groupValue: _level,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _level = value;
+                                    });
+                                  }),
+                              RadioListTile(
+                                  title: const Text("Third Level"),
+                                  value: Level.Third,
+                                  groupValue: _level,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _level = value;
+                                    });
+                                  }),
+                              RadioListTile(
+                                  title: const Text("Fourth Level"),
+                                  value: Level.Fourth,
+                                  groupValue: _level,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _level = value;
+                                    });
+                                  }),
+                              SizedBox(height: 10),
+                              ElevatedButton(
+                                  onPressed: () async {
                                     if (_formKey.currentState!.validate()) {
-                                      
-                                      String id = widget.userID; 
+                                      String id = widget.userID;
                                       String email = _email.text;
                                       String name = _name.text;
                                       String password = _password.text;
                                       int? gender = _gender?.index;
                                       int? level = _level?.index;
 
-                                      String selectEmail = "SELECT * FROM Students WHERE email = '$email' AND id NOT IN ('$id');";  
+                                      String selectEmail =
+                                          "SELECT * FROM Students WHERE email = '$email' AND id NOT IN ('$id');";
 
                                       var emails =
-                                          await db.selectData(selectEmail); 
+                                          await db.selectData(selectEmail);
                                       if (emails.length > 0) {
                                         print("Registeration Failed");
-                                      }
-                                      else{
+                                      } else {
                                         _formKey.currentState!.save();
 
                                         String updateQuery =
@@ -282,9 +286,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                         ));
                                       }
                                     }
-                  }, child: const Text("update")),
-                ])));
-          }
-  }));
+                                  },
+                                  child: const Text("update")),
+                            ])));
+              }
+            }));
   }
 }
