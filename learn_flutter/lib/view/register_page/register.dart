@@ -2,6 +2,8 @@ import "package:flutter/material.dart";
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:learn_flutter/view/register_page/registeration_failure.dart';
+import 'package:learn_flutter/view/register_page/registeration_success.dart';
 
 enum Gender { Male, Female }
 
@@ -29,15 +31,15 @@ class _RegisterPageState extends State<RegisterPage> {
   final String HOST = 'http://192.168.1.13:8000';
 
   Future<void> postRegisterData() async {
-  Map<String, dynamic> data = {
-    'id':_idController.text,
-    'name':_nameController.text,
-    'email':_emailController.text,
-    'gender':_gender?.index,
-    'level':_level?.index,
-    'password':_passwordController.text,
-    'confirmation_password': _confirmationPasswordController.text
-  };
+    Map<String, dynamic> data = {
+      'id': _idController.text,
+      'name': _nameController.text,
+      'email': _emailController.text,
+      'gender': _gender?.index,
+      'level': _level?.index,
+      'password': _passwordController.text,
+      'confirmation_password': _confirmationPasswordController.text
+    };
 
     try {
       final response = await http.post(
@@ -50,7 +52,8 @@ class _RegisterPageState extends State<RegisterPage> {
       if (response.statusCode == 200) {
         print('Registered Succefully');
         Map<String, dynamic> responseJson = jsonDecode(response.body);
-        await storage.write(key: 'access_token', value: responseJson['access_token']);
+        await storage.write(
+            key: 'access_token', value: responseJson['access_token']);
       } else {
         print('Failed to post data: ${response.statusCode}');
         print('${response.body}');
@@ -58,7 +61,7 @@ class _RegisterPageState extends State<RegisterPage> {
     } catch (e) {
       print('Error posting data: $e');
     }
-}
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -121,7 +124,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     });
                   }),
               TextFormField(
-                controller:_emailController,
+                controller: _emailController,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return "This Field is mandatory";
@@ -237,6 +240,19 @@ class _RegisterPageState extends State<RegisterPage> {
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         postRegisterData();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  const RegisterSuccessPage()),
+                        );
+                      } else {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  const RegisterationFailurePage()),
+                        );
                       }
                     },
                     child: const Text("Register")),
