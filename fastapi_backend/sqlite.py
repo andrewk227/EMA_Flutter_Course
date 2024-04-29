@@ -18,7 +18,7 @@ imageURL TEXT,
 CREATE TABLE Stores (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name VARCHAR(50) NOT NULL,
-    location VARCHAR(50) NOT NULL, 
+    location VARCHAR(50) NOT NULL 
 )
 """
 

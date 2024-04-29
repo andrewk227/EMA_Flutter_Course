@@ -42,3 +42,10 @@ def valid_password(password:str):
 
 def equal(password:str , confirmation_password:str):
     return password == confirmation_password
+
+def valid_store(store_data:dict):
+    mandatory_fields  = ['name' , 'location']
+    for field in mandatory_fields:
+        if field not in store_data and store_data[field]:
+            return False
+    return True

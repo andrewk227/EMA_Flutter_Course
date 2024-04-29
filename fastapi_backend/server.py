@@ -1,6 +1,6 @@
 from typing import Optional
-from fastapi import FastAPI , HTTPException , Header
-from validators import valid_email , valid_id ,valid_name , valid_password , equal , valid_user_creds , valid_user , valid_updated_user
+from fastapi import FastAPI , HTTPException , Header , Response , status
+from validators import valid_email , valid_id ,valid_name , valid_password , equal , valid_user_creds , valid_user , valid_updated_user , valid_store
 from sqlite import excute_insert_query , excute_select_query , excute_update_query
 from tokens import generate_token_expire_days , create_access_token , decode_token
 
@@ -53,8 +53,8 @@ async def register(user:dict):
 
     raise HTTPException(status_code=400 , detail="Password and Confirmation Password are not the same")
 
-@app.post("/user/login")
-async def login(credentials:dict):
+@app.post("/user/login" , status_code=201)
+async def login(credentials:dict ):
 
     if not valid_user_creds(credentials):
         raise HTTPException(status_code=400 , detail="Missing credentials")
@@ -114,3 +114,62 @@ def get_user_data(access_token:Optional[str]= Header(None)):
     keys = ['id' , 'name' , 'email' , 'gender' , 'level' , 'password' , 'imageURL']
     user = dict(zip(keys , rows))
     return user
+
+# all Stores data
+@app.get("/store")
+def get_store_data(access_token:Optional[str]= Header(None)):
+    data = decode_token(access_token)
+    if not data:
+        raise HTTPException(status_code=403 ,detail="Your Auth Token has Expired, Please Login Again.")
+
+    store_query = f"SELECT * FROM Stores"
+    rows = excute_select_query(store_query)
+    return rows
+
+@app.post("/store",  status_code=201)
+def create_store(store_data:dict , access_token:Optional[str]= Header(None)) :
+    data = decode_token(access_token)
+    if not data:
+        raise HTTPException(status_code=403 ,detail="Your Auth Token has Expired, Please Login Again.")
+
+    if not valid_store(store_data):
+        raise HTTPException(status_code=400 , detail="Missing store Fields")
+        
+    store_create_query = f"INSERT INTO Stores (name , location) VALUES ('{store_data['name']}' , '{store_data['location']}');"
+    excute_insert_query(store_create_query)
+    return store_data 
+
+@app.post("/store/favorite" , status_code=201)
+def add_favorite_store(store_id:int ,access_token:Optional[str] = Header(None)):
+    data = decode_token(access_token)
+    if not data:
+        raise HTTPException(status_code=403 ,detail="Your Auth Token has Expired, Please Login Again.")
+
+    id = data['id']
+
+    insert_query = f"INSERT INTO Favorite_Stores (student_id , store_id) VALUES ('{id}' , '{store_id}');"
+    excute_insert_query(insert_query)
+
+    select_query = f"SELECT * FROM Favorite_Stores WHERE store_id = '{store_id}' AND student_id = '{id}';"
+    rows = excute_select_query(select_query)
+    return rows
+
+@app.get("/store/favorite")
+def get_favorite_store(access_token:Optional[str]= Header(None)):
+    data = decode_token(access_token)
+    if not data:
+        raise HTTPException(status_code=403 ,detail="Your Auth Token has Expired, Please Login Again.")
+
+    id = data['id']
+
+    select_query = f"SELECT * FROM Favorite_Stores WHERE student_id = '{id}';"
+    rows = excute_select_query(select_query)
+    
+    stores_ids = []
+    for row in rows:
+        stores_ids.append(str(row[2]))
+    
+    fav_stores = f"SELECT * FROM Stores WHERE id IN ({','.join(stores_ids)});"
+    rows = excute_select_query(fav_stores)
+
+    return rows
