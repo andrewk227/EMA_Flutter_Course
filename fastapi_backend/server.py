@@ -11,7 +11,7 @@ async def home():
     return "Welcome to Flutter Assignment 1"
 
 
-@app.post("/user/register")
+@app.post("/user/register" , status_code=201)
 async def register(user:dict):
 
     if not valid_user(user) or "confirmation_password" not in user:
@@ -53,7 +53,7 @@ async def register(user:dict):
 
     raise HTTPException(status_code=400 , detail="Password and Confirmation Password are not the same")
 
-@app.post("/user/login" , status_code=201)
+@app.post("/user/login")
 async def login(credentials:dict ):
 
     if not valid_user_creds(credentials):
@@ -173,3 +173,26 @@ def get_favorite_store(access_token:Optional[str]= Header(None)):
     rows = excute_select_query(fav_stores)
 
     return rows
+
+
+@app.get("/store/favorite/{store_id}")
+def get_favorite_store_by_id(store_id:int , access_token:Optional[str]= Header(None)):
+    data = decode_token(access_token)
+    if not data:
+        raise HTTPException(status_code=403 ,detail="Your Auth Token has Expired, Please Login Again.")
+    
+    id = data['id']
+
+    select_query = f"SELECT * FROM Favorite_Stores WHERE store_id = '{store_id}' AND student_id = '{id}';"
+
+    rows = excute_select_query(select_query)
+
+    if not rows :
+        raise HTTPException(status_code=404 , detail="Favorite Store Not Found")
+    
+    store_id = rows[0][2]
+    
+    select_store_query = f"SELECT * FROM Stores WHERE id = '{store_id}';"
+    rows = excute_select_query(select_store_query)
+
+    return rows[0]
