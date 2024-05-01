@@ -1,3 +1,5 @@
+from tokens import decode_token
+from fastapi import HTTPException
 import re
 
 def valid_user(user:dict):
@@ -49,3 +51,11 @@ def valid_store(store_data:dict):
         if field not in store_data and store_data[field]:
             return False
     return True
+
+
+def validate_access_token(access_token:str):
+    data = decode_token(access_token)
+    if not data:
+        raise HTTPException(status_code=403 ,detail="Your Auth Token has Expired, Please Login Again.")
+    
+    return data['id']
