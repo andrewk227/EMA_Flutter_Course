@@ -1,13 +1,5 @@
 import sqlite3
 
-# Name required
-# Gender null = True
-# email required , validation 
-# id , required , validation
-# level null = True
-# password validation , required
-# confirm password validation , required 
-
 """ 
 CREATE TABLE Students ( 
 id VARCHAR(9) NOT NULL,
@@ -20,6 +12,25 @@ imageURL TEXT,
  PRIMARY KEY(id)
 );
 
+"""
+
+""" 
+CREATE TABLE Stores (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name VARCHAR(50) NOT NULL,
+    location VARCHAR(50) NOT NULL 
+)
+"""
+
+"""
+CREATE TABLE Favorite_Stores (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    student_id VARCHAR(9) NOT NULL,
+    store_id INTEGER NOT NULL,
+    FOREIGN KEY(student_id) REFERENCES Students(id),
+    FOREIGN KEY(store_id) REFERENCES Stores(id),
+    UNIQUE(student_id, store_id)
+)
 """
 
 def excute_insert_query(query):

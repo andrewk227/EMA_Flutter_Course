@@ -280,7 +280,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                       var emails =
                                           await db.selectData(selectEmail);
                                       if (emails.length > 0) {
-                                        print("Registeration Failed");
+                                        print("Update Failed");
                                       } else {
                                         _formKey.currentState!.save();
 
