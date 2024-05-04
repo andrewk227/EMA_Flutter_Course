@@ -37,56 +37,45 @@ class _FavouritesState extends State<Favourites> {
         ],
         backgroundColor: Colors.purple,
       ),
-      body: FutureBuilder(
-        future: controller.fetchFavourites(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-            return ListView.builder(
-                padding: EdgeInsets.all(16),
-                itemCount: snapshot.data!.length,
-                itemBuilder: (context, index) {
-                  return Column(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.white),
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.purple.shade50,
-                        ),
-                        child: ListTile(
-                          leading: const Icon(Icons.store),
-                          trailing: Row(
-                            children: [
-                              IconButton(
-                                icon: const Icon(Icons.location_on),
-                                onPressed: () {},
-                              ),
-                              IconButton(
-                                icon: const Icon(Icons.favorite),
-                                onPressed: () {},
-                              ),
-                            ],
+      body: FutureBuilder(future: controller.fetchFavourites() , builder:(context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+          return ListView.builder(
+                  padding: EdgeInsets.all(16),
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (context, index) {
+                    return Column(
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.white),
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.purple.shade50,
                           ),
-                          title: Text(snapshot.data![index][1]),
-                          subtitle: Text(snapshot.data![index][2]),
+                          child: ListTile(
+                            leading: Icon(Icons.store),
+                            trailing: IconButton(
+                              icon: Icon(Icons.favorite_border),
+                              onPressed: () {},
+                            ),
+                            title: Text(snapshot.data![index][1]),
+                            subtitle: Text(snapshot.data![index][2]),
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 10),
-                    ],
-                  );
-                });
-          } else {
-            return const Center(
-              child: Text("No Data Found"),
-            );
-          }
-        },
-      ),
+                        const SizedBox(height: 10),
+                      ],
+                    );
+                  });
+        } else {
+          return const Center(
+            child: Text("No Data Found"),
+          );
+        }
+      },),
     ));
   }
 }

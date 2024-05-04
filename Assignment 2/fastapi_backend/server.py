@@ -176,3 +176,7 @@ def get_favorite_store_by_id(store_id:int , access_token:Optional[str]= Header(N
     rows = excute_select_query(select_store_query)
 
     return rows[0]
+
+@app.get("/token")
+def get_token(access_token:Optional[str]= Header(None)):
+    return decode_token(access_token)

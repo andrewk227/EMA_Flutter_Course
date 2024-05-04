@@ -19,6 +19,8 @@ class FavouriteController extends GetxController {
       return [];
     }
 
+    print(token);
+
     try {
       final response = await http.get(Uri.parse("$HOST/store/favorite") , headers: <String, String>{
         "access-token": token,

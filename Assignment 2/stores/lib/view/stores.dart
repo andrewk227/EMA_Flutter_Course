@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stores/controller/store_controller.dart';
-import 'package:stores/routes/routes.dart';
+import 'package:stores/view/add_store.dart';
+import 'package:stores/view/favourites.dart';
 
 class StoresPage extends StatefulWidget {
   const StoresPage({super.key});
@@ -26,14 +27,18 @@ class _StoresPageState extends State<StoresPage> {
           IconButton(
             onPressed: () {
               Navigator.pop(context);
-              Navigator.pushNamed(context, AppRoutes.addStoreScreen);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AddStore()),
+              );
             },
             icon: const Icon(Icons.add),
             color: Colors.white,
           ),
           IconButton(
             onPressed: () {
-              Navigator.pushNamed(context, AppRoutes.favouritesScreen);
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => Favourites()));
             },
             icon: const Icon(Icons.favorite),
             color: Colors.white,
@@ -53,9 +58,9 @@ class _StoresPageState extends State<StoresPage> {
               return const Center(child: CircularProgressIndicator());
             }
             if (snapshot.hasData) {
-              // print(snapshot.data);
+              print(snapshot.data);
               return ListView.builder(
-                  padding: const EdgeInsets.all(16),
+                  padding: EdgeInsets.all(16),
                   itemCount: snapshot.data!.length,
                   itemBuilder: (context, index) {
                     return Column(
@@ -67,22 +72,16 @@ class _StoresPageState extends State<StoresPage> {
                             color: Colors.purple.shade50,
                           ),
                           child: ListTile(
-                            leading: const Icon(Icons.store),
+                            leading: Icon(Icons.store),
                             trailing: IconButton(
-                              icon: const Icon(Icons.favorite_border),
+                              icon: Icon(Icons.favorite_border),
                               onPressed: () async {
                                 bool result = await controller
                                     .addFavorite(snapshot.data![index][0]);
                                 if (result) {
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(const SnackBar(
-                                    content: Text("Added to Favourites"),
-                                  ));
+                                  print("Added Successfully");
                                 } else {
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(const SnackBar(
-                                    content: Text("Error while adding"),
-                                  ));
+                                  print("Error while adding");
                                 }
                               },
                             ),

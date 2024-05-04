@@ -3,7 +3,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:stores/routes/routes.dart';
 
 void main() {
-  FlutterSecureStorage.setMockInitialValues({});
+  FlutterSecureStorage.setMockInitialValues({"access_token": ""});
   runApp(const MyApp());
 }
 
