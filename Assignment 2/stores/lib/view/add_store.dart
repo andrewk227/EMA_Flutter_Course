@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stores/controller/adding_store_controller.dart';
 
 class AddStore extends StatefulWidget {
   const AddStore({super.key});
@@ -8,6 +9,8 @@ class AddStore extends StatefulWidget {
 }
 
 class _AddStoreState extends State<AddStore> {
+  AddStoreController controller = AddStoreController.instance;
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -46,6 +49,7 @@ class _AddStoreState extends State<AddStore> {
           ),
           const SizedBox(height: 30),
           TextFormField(
+              controller: controller.name,
               keyboardType: TextInputType.text,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
@@ -56,6 +60,7 @@ class _AddStoreState extends State<AddStore> {
             height: 20,
           ),
           TextFormField(
+              controller: controller.address,
               keyboardType: TextInputType.text,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
