@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:stores/controller/adding_store_controller.dart';
 
 class AddStore extends StatefulWidget {
@@ -9,7 +11,7 @@ class AddStore extends StatefulWidget {
 }
 
 class _AddStoreState extends State<AddStore> {
-  AddStoreController controller = AddStoreController.instance;
+  AddStoreController controller = Get.put(AddStoreController());
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +73,7 @@ class _AddStoreState extends State<AddStore> {
             height: 20,
           ),
           ElevatedButton.icon(
-              onPressed: null,
+              onPressed: controller.addStore,
               icon: const Icon(
                 Icons.add,
                 color: Colors.black,
