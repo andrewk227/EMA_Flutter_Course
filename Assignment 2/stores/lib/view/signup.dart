@@ -192,45 +192,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   child: ElevatedButton(
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
-                          String id = controller.idController.text;
-                          String email = controller.emailController.text;
-                          String selectID =
-                              "SELECT * FROM Students WHERE id = '$id';";
-                          String selectEmail =
-                              "SELECT * FROM Students WHERE email = '$email';";
-
-                          var ids = await db.selectData(selectID);
-                          var emails = await db.selectData(selectEmail);
-
-                          if (ids.length > 0 || emails.length > 0) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const StoresPage()),
-                            );
-                          } else {
-                            String name = controller.nameController.text;
-                            String password =
-                                controller.passwordController.text;
-                            int? gender = controller.gender?.index;
-                            int? level = controller.level?.index;
-
-                            String insertQuery =
-                                "INSERT INTO Students VALUES ('$id' , '$name' , '$email' ,'$password', '$gender' , '$level' , 'null');";
-                            print(
-                                "=================================================");
-                            print(insertQuery);
-                            print(
-                                "=================================================");
-                            var res = await db.insertData(insertQuery);
-                            print("INSERTED DATA");
-                            print(
-                                "=================================================");
-                            print(res);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text("please try again")));
-                          }
+                          controller.register();
                         }
                       },
                       child: const Text("Register")),

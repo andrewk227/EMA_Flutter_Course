@@ -17,5 +17,8 @@ class SignUpController extends GetxController {
   final idController = TextEditingController();
   final confirmationPasswordController = TextEditingController();
   // final storage = FlutterSecureStorage();
-  // sqliteDB db = sqliteDB();
+
+  Future<bool> register() async {
+    return false; 
+  }
 }

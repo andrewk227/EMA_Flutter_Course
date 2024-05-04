@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stores/controller/login_controller.dart';
+import 'package:stores/view/stores.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -69,6 +70,7 @@ class _LoginPageState extends State<LoginPage> {
           ElevatedButton(onPressed: () async {
             if(_key.currentState!.validate()){
               bool result = await controller.login();
+              print(result);
               if (result) {
                 // navigate to home
                 Navigator.push(
@@ -76,6 +78,7 @@ class _LoginPageState extends State<LoginPage> {
                           MaterialPageRoute(
                               builder: (context) => const StoresPage()),
                         );
+
               }
               else {
                 // show error

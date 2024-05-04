@@ -41,7 +41,7 @@ class LoginController extends GetxController {
       }
     } catch (e) {
       print(e);
+      return false;
     }
-    return false;
   }
 }
