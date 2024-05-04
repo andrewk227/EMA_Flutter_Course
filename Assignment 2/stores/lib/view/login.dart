@@ -11,6 +11,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   LoginController controller = Get.put(LoginController());
+  final _key = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -18,6 +19,7 @@ class _LoginPageState extends State<LoginPage> {
       appBar: AppBar(
           backgroundColor: Colors.purple, title: const Text("Login Page")),
       body: Form(
+        key: _key,
           child: Container(
         padding: const EdgeInsets.all(16),
         child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
@@ -34,6 +36,12 @@ class _LoginPageState extends State<LoginPage> {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                 )),
+                validator: (value){
+                  if(value == null || value.isEmpty){
+                    return "Enter ID";
+                  } 
+                  return null;
+                },
           ),
           const SizedBox(
             height: 20,
@@ -50,9 +58,30 @@ class _LoginPageState extends State<LoginPage> {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                 )),
+                validator: (value){
+                  if(value == null || value.length < 8){
+                    return "Enter Password";
+                  }
+                  return null;
+                },
           ),
           const SizedBox(height: 20),
-          ElevatedButton(onPressed: () {}, child: const Text("Enter"))
+          ElevatedButton(onPressed: () async {
+            if(_key.currentState!.validate()){
+              bool result = await controller.login();
+              if (result) {
+                // navigate to home
+                Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const StoresPage()),
+                        );
+              }
+              else {
+                // show error
+              }
+            }
+          }, child: const Text("Enter"))
         ]),
       )),
     ));
