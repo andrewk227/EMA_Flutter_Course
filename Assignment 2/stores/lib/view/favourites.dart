@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stores/view/add_store.dart';
 
 class Favourites extends StatefulWidget {
   const Favourites({super.key});
@@ -19,13 +20,10 @@ class _FavouritesState extends State<Favourites> {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, AddStore() as String);
+            },
             icon: const Icon(Icons.add),
-            color: Colors.white,
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.favorite),
             color: Colors.white,
           ),
           IconButton(

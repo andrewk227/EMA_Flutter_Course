@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:stores/controller/adding_store_controller.dart';
+import 'package:stores/model/store.dart';
+import 'package:stores/view/stores.dart';
 
 class AddStore extends StatefulWidget {
   const AddStore({super.key});
@@ -24,8 +26,13 @@ class _AddStoreState extends State<AddStore> {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.add),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Stores()),
+              );
+            },
+            icon: const Icon(Icons.home),
             color: Colors.white,
           ),
           IconButton(
@@ -73,7 +80,19 @@ class _AddStoreState extends State<AddStore> {
             height: 20,
           ),
           ElevatedButton.icon(
-              onPressed: controller.addStore,
+              onPressed: () async {
+                bool flag = await controller.addStore();
+                if (flag) {
+                  controller.snackBar = SnackBar(
+                    content: Text("Store Added Successfully"),
+                  );
+                } else {
+                  controller.snackBar = SnackBar(
+                    content: Text("Store Can't Added"),
+                  );
+                }
+                ScaffoldMessenger.of(context).showSnackBar(controller.snackBar);
+              },
               icon: const Icon(
                 Icons.add,
                 color: Colors.black,

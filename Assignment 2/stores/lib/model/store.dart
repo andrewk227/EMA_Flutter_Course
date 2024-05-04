@@ -1,6 +1,6 @@
-class Stores {
+class StoreModel {
   String name = "Store X";
   String address = "None";
 
-  Stores({required this.name, required this.address});
+  StoreModel({required this.name, required this.address});
 }
