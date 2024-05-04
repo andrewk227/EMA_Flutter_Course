@@ -29,7 +29,7 @@ class _AddStoreState extends State<AddStore> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => Stores()),
+                MaterialPageRoute(builder: (context) => StoresPage()),
               );
             },
             icon: const Icon(Icons.home),
@@ -37,9 +37,8 @@ class _AddStoreState extends State<AddStore> {
           ),
           IconButton(
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Favourites()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => Favourites()));
             },
             icon: const Icon(Icons.favorite),
             color: Colors.white,

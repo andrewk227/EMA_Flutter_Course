@@ -4,14 +4,14 @@ import 'package:stores/controller/store_controller.dart';
 import 'package:stores/view/add_store.dart';
 import 'package:stores/view/favourites.dart';
 
-class Stores extends StatefulWidget {
-  const Stores({super.key});
+class StoresPage extends StatefulWidget {
+  const StoresPage({super.key});
 
   @override
-  State<Stores> createState() => _StoresState();
+  State<StoresPage> createState() => _StoresPageState();
 }
 
-class _StoresState extends State<Stores> {
+class _StoresPageState extends State<StoresPage> {
   StoreController controller = Get.put(StoreController());
 
   @override
@@ -37,9 +37,8 @@ class _StoresState extends State<Stores> {
           ),
           IconButton(
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Favourites()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => Favourites()));
             },
             icon: const Icon(Icons.favorite),
             color: Colors.white,
@@ -76,14 +75,12 @@ class _StoresState extends State<Stores> {
                             leading: Icon(Icons.store),
                             trailing: IconButton(
                               icon: Icon(Icons.favorite_border),
-                              onPressed: () async{
-                                bool result = await controller.addFavorite(snapshot.data![index][0]);
-                                if (result)
-                                {
+                              onPressed: () async {
+                                bool result = await controller
+                                    .addFavorite(snapshot.data![index][0]);
+                                if (result) {
                                   print("Added Successfully");
-                                }
-                                else
-                                {
+                                } else {
                                   print("Error while adding");
                                 }
                               },
