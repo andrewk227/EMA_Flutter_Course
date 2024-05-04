@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:stores/controller/adding_store_controller.dart';
 import 'package:stores/model/store.dart';
+import 'package:stores/view/favourites.dart';
 import 'package:stores/view/stores.dart';
 
 class AddStore extends StatefulWidget {
@@ -36,7 +36,12 @@ class _AddStoreState extends State<AddStore> {
             color: Colors.white,
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Favourites()),
+              );
+            },
             icon: const Icon(Icons.favorite),
             color: Colors.white,
           ),
@@ -83,11 +88,11 @@ class _AddStoreState extends State<AddStore> {
               onPressed: () async {
                 bool flag = await controller.addStore();
                 if (flag) {
-                  controller.snackBar = SnackBar(
+                  controller.snackBar = const SnackBar(
                     content: Text("Store Added Successfully"),
                   );
                 } else {
-                  controller.snackBar = SnackBar(
+                  controller.snackBar = const SnackBar(
                     content: Text("Store Can't Added"),
                   );
                 }
