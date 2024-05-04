@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stores/controller/signup_controller.dart';
+import 'package:stores/routes/routes.dart';
 import 'package:stores/view/stores.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -192,7 +193,24 @@ class _SignUpPageState extends State<SignUpPage> {
                   child: ElevatedButton(
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
-                          controller.register();
+                          bool result = await controller.register();
+                          if (result) {
+                            // TODO: Navigate to login page
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Registration Successful , Please Enter your Credentials'),
+                              )
+                            );
+                          Navigator.pushNamed(context, AppRoutes.loginScreen);
+                          }
+                          else{
+                            // TODO: Show error
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Registration Failed'),
+                              )
+                            );
+                          }
                         }
                       },
                       child: const Text("Register")),
