@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:stores/controller/adding_store_controller.dart';
 import 'package:stores/model/store.dart';
+import 'package:stores/view/favourites.dart';
 import 'package:stores/view/stores.dart';
 
 class AddStore extends StatefulWidget {
@@ -36,7 +37,11 @@ class _AddStoreState extends State<AddStore> {
             color: Colors.white,
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Favourites()));
+            },
             icon: const Icon(Icons.favorite),
             color: Colors.white,
           ),

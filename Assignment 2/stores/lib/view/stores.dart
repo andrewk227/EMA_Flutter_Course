@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stores/controller/store_controller.dart';
 import 'package:stores/view/add_store.dart';
+import 'package:stores/view/favourites.dart';
 
 class Stores extends StatefulWidget {
   const Stores({super.key});
@@ -35,7 +36,11 @@ class _StoresState extends State<Stores> {
             color: Colors.white,
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Favourites()));
+            },
             icon: const Icon(Icons.favorite),
             color: Colors.white,
           ),
@@ -71,7 +76,17 @@ class _StoresState extends State<Stores> {
                             leading: Icon(Icons.store),
                             trailing: IconButton(
                               icon: Icon(Icons.favorite_border),
-                              onPressed: () {},
+                              onPressed: () async{
+                                bool result = await controller.addFavorite(snapshot.data![index][0]);
+                                if (result)
+                                {
+                                  print("Added Successfully");
+                                }
+                                else
+                                {
+                                  print("Error while adding");
+                                }
+                              },
                             ),
                             title: Text(snapshot.data![index][1]),
                             subtitle: Text(snapshot.data![index][2]),
