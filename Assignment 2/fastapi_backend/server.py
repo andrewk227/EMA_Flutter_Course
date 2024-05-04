@@ -132,13 +132,13 @@ def create_store(store_data:dict , access_token:Optional[str]= Header(None)) :
     return store_data 
 
 @app.post("/store/favorite" , status_code=201)
-def add_favorite_store(store_id:int ,access_token:Optional[str] = Header(None)):
+def add_favorite_store(store_id:dict ,access_token:Optional[str] = Header(None)):
     ID = validate_access_token(access_token)
 
-    insert_query = f"INSERT INTO Favorite_Stores (student_id , store_id) VALUES ('{ID}' , '{store_id}');"
+    insert_query = f"INSERT INTO Favorite_Stores (student_id , store_id) VALUES ('{ID}' , '{store_id['id']}');"
     excute_insert_query(insert_query)
 
-    select_query = f"SELECT * FROM Favorite_Stores WHERE store_id = '{store_id}' AND student_id = '{ID}';"
+    select_query = f"SELECT * FROM Favorite_Stores WHERE store_id = '{store_id['id']}' AND student_id = '{ID}';"
     rows = excute_select_query(select_query)
     return rows
 
