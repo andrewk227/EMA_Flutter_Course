@@ -60,11 +60,11 @@ class _FavouritesState extends State<Favourites> {
                           leading: const Icon(Icons.store),
                           trailing: IconButton(
                             icon: const Icon(Icons.location_on),
-                            onPressed: () {
+                            onPressed: () async {
                               StoreModel store = StoreModel(
                                   name: snapshot.data![index][1],
                                   address: snapshot.data![index][2]);
-                              distanceController.getCurrentPosition();
+                              await distanceController.getCurrentPosition();
                               AppRoutes.navigateToDistanceScreen(context, store);
                             },
                           ),
