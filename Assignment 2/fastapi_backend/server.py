@@ -1,7 +1,7 @@
 from typing import Optional
 from fastapi import FastAPI , HTTPException , Header , Response , status
 from validators import valid_email , valid_id ,valid_name , valid_password , equal , valid_user_creds , valid_user , valid_updated_user , valid_store , validate_access_token
-from sqlite import excute_insert_query , excute_select_query , excute_update_query
+from sqlite import excute_insert_query , excute_select_query , excute_update_query , excute_delete_query
 from tokens import generate_token_expire_days , create_access_token , decode_token
 
 app = FastAPI()
@@ -132,15 +132,22 @@ def create_store(store_data:dict , access_token:Optional[str]= Header(None)) :
     return store_data 
 
 @app.post("/store/favorite" , status_code=201)
-def add_favorite_store(store_id:dict ,access_token:Optional[str] = Header(None)):
+def add_remove_favorite(store_id:dict ,access_token:Optional[str] = Header(None)):
     ID = validate_access_token(access_token)
+
+    select_query = f"SELECT * FROM Favorite_Stores WHERE store_id = '{store_id['id']}' AND student_id = '{ID}';"
+    rows = excute_select_query(select_query)
+    if rows:
+        delete_query = f"DELETE FROM Favorite_Stores WHERE store_id = '{store_id['id']}' AND student_id = '{ID}';"
+        excute_delete_query(delete_query)
+        return True
 
     insert_query = f"INSERT INTO Favorite_Stores (student_id , store_id) VALUES ('{ID}' , '{store_id['id']}');"
     excute_insert_query(insert_query)
 
     select_query = f"SELECT * FROM Favorite_Stores WHERE store_id = '{store_id['id']}' AND student_id = '{ID}';"
     rows = excute_select_query(select_query)
-    return rows
+    return True
 
 @app.get("/store/favorite")
 def get_favorite_store(access_token:Optional[str]= Header(None)):

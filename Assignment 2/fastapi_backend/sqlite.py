@@ -69,6 +69,16 @@ def excute_update_query(query):
 
     except sqlite3.Error:
         print(f"Error occured: {sqlite3.Error}")
+def excute_delete_query(query):
+    try :
+        db_connection = sqlite3.connect('flutter.db')
+        cursor = db_connection.cursor()
+        cursor.execute(query)
+        db_connection.commit()
+        db_connection.close()
+
+    except sqlite3.Error:
+        print(f"Error occured: {sqlite3.Error}")
 
 
 if __name__ == '__main__':
