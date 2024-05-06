@@ -28,13 +28,6 @@ class _FavouritesState extends State<Favourites> {
         ),
         actions: [
           IconButton(
-            onPressed: () {
-              Navigator.pushNamed(context, const AddStore() as String);
-            },
-            icon: const Icon(Icons.add),
-            color: Colors.white,
-          ),
-          IconButton(
             onPressed: () {},
             icon: const Icon(Icons.person),
             color: Colors.white,
@@ -68,12 +61,11 @@ class _FavouritesState extends State<Favourites> {
                           trailing: IconButton(
                             icon: const Icon(Icons.location_on),
                             onPressed: () {
-                              distanceController.getCurrentPosition();
-                              Navigator.pushNamed(
-                                  context, AppRoutes.distanceScreen);
                               StoreModel store = StoreModel(
                                   name: snapshot.data![index][1],
                                   address: snapshot.data![index][2]);
+                              distanceController.getCurrentPosition();
+                              AppRoutes.navigateToDistanceScreen(context, store);
                             },
                           ),
                           // IconButton(

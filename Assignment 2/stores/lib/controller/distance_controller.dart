@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:geolocator/geolocator.dart';
@@ -6,7 +8,7 @@ class DistanceController extends GetxController {
   static DistanceController get instance => Get.find();
 
   String? currentAddress;
-  Position? currentPosition;
+  late Position currentPosition;
 
   Future<bool> handleLocationPermission() async {
     bool serviceEnabled;
@@ -50,5 +52,24 @@ class DistanceController extends GetxController {
     }).catchError((e) {
       debugPrint(e);
     });
+  }
+
+  double getLatitude(String address) {
+    String lat = address.split(",")[0];
+    return double.parse(lat); 
+  }
+
+  double getlongitude(String address) {
+    String lon = address.split(",")[1];
+    return double.parse(lon);
+  }
+
+  double roundTo(double number, int decimalPlaces) {
+    double mod = double.parse(pow(10.0, decimalPlaces).toString());
+    return ((number * mod).roundToDouble() / mod);
+}
+
+  double calculateDistance(double lat1, double lon1,double lat2,double lon2) {
+    return roundTo(Geolocator.distanceBetween(lat1, lon1, lat2, lon2) / 1000 , 2);
   }
 }

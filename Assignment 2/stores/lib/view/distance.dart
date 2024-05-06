@@ -4,8 +4,7 @@ import 'package:stores/controller/distance_controller.dart';
 import 'package:stores/model/store.dart';
 
 class Distance extends StatefulWidget {
-  final StoreModel store;
-  const Distance({super.key, required this.store});
+  const Distance({super.key});
 
   @override
   State<Distance> createState() => _DistanceState();
@@ -13,8 +12,14 @@ class Distance extends StatefulWidget {
 
 class _DistanceState extends State<Distance> {
   DistanceController distanceController = Get.put(DistanceController());
+
   @override
   Widget build(BuildContext context) {
+  final StoreModel store = ModalRoute.of(context)!.settings.arguments as StoreModel;
+  double long = distanceController.getlongitude(store.address);
+  double lat = distanceController.getLatitude(store.address);
+  double distance = distanceController.calculateDistance(distanceController.currentPosition.latitude, distanceController.currentPosition.longitude, lat, long);
+
     return SafeArea(
         child: Scaffold(
       appBar: AppBar(
@@ -25,15 +30,15 @@ class _DistanceState extends State<Distance> {
         backgroundColor: Colors.purple,
       ),
       body: Column(children: [
-        Text("Store Name: \n${widget.store.name}"),
+        Text("Store Name: \n${store.name}"),
         const SizedBox(
           height: 10,
         ),
-        Text("Store Address: \n${widget.store.address}"),
+        Text("Store Address: \n${store.address}"),
         const SizedBox(
           height: 10,
         ),
-        Text("Store Distnace: \n"),
+        Text("Store Distance: $distance Km Away \n"),
       ]),
     ));
   }

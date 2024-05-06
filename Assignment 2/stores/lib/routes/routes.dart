@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stores/model/store.dart';
 import 'package:stores/view/add_store.dart';
 import 'package:stores/view/distance.dart';
 import 'package:stores/view/favourites.dart';
@@ -22,4 +23,8 @@ class AppRoutes {
     distanceScreen: (context) => const Distance(),
     signUpScreen: (context) => const SignUpPage(),
   };
+    // Helper method to navigate to the Distance screen with parameters
+  static void navigateToDistanceScreen(BuildContext context, StoreModel storeModel) {
+    Navigator.pushNamed(context, distanceScreen, arguments: storeModel);
+  }
 }

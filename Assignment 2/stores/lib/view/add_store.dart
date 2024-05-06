@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stores/controller/adding_store_controller.dart';
 import 'package:stores/model/store.dart';
+import 'package:stores/routes/routes.dart';
 import 'package:stores/view/favourites.dart';
 import 'package:stores/view/stores.dart';
 
@@ -89,12 +90,15 @@ class _AddStoreState extends State<AddStore> {
                   controller.snackBar = const SnackBar(
                     content: Text("Store Added Successfully"),
                   );
+                ScaffoldMessenger.of(context).showSnackBar(controller.snackBar);
+                Navigator.pop(context);
+                Navigator.pushNamed(context, AppRoutes.storesScreen);
                 } else {
                   controller.snackBar = const SnackBar(
                     content: Text("Store Can't Added"),
                   );
-                }
                 ScaffoldMessenger.of(context).showSnackBar(controller.snackBar);
+                }
               },
               icon: const Icon(
                 Icons.add,
