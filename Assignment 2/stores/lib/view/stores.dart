@@ -29,7 +29,7 @@ class _StoresPageState extends State<StoresPage> {
               Navigator.pop(context);
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => AddStore()),
+                MaterialPageRoute(builder: (context) => const AddStore()),
               );
             },
             icon: const Icon(Icons.add),
@@ -38,7 +38,7 @@ class _StoresPageState extends State<StoresPage> {
           IconButton(
             onPressed: () {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => Favourites()));
+                  MaterialPageRoute(builder: (context) => const Favourites()));
             },
             icon: const Icon(Icons.favorite),
             color: Colors.white,
@@ -60,7 +60,7 @@ class _StoresPageState extends State<StoresPage> {
             if (snapshot.hasData) {
               print(snapshot.data);
               return ListView.builder(
-                  padding: EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(16),
                   itemCount: snapshot.data!.length,
                   itemBuilder: (context, index) {
                     return Column(
@@ -72,9 +72,9 @@ class _StoresPageState extends State<StoresPage> {
                             color: Colors.purple.shade50,
                           ),
                           child: ListTile(
-                            leading: Icon(Icons.store),
+                            leading: const Icon(Icons.store),
                             trailing: IconButton(
-                              icon: Icon(Icons.favorite_border),
+                              icon: const Icon(Icons.favorite_border),
                               onPressed: () async {
                                 bool result = await controller
                                     .addFavorite(snapshot.data![index][0]);

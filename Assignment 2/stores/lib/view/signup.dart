@@ -22,6 +22,7 @@ class _SignUpPageState extends State<SignUpPage> {
       appBar: AppBar(
         title: const Text(
           "Sign Up Page",
+          style: TextStyle(color: Colors.white),
         ),
         backgroundColor: Colors.purple,
       ),
@@ -196,20 +197,18 @@ class _SignUpPageState extends State<SignUpPage> {
                           bool result = await controller.register();
                           if (result) {
                             // TODO: Navigate to login page
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Registration Successful , Please Enter your Credentials'),
-                              )
-                            );
-                          Navigator.pushNamed(context, AppRoutes.loginScreen);
-                          }
-                          else{
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              content: Text(
+                                  'Registration Successful , Please Enter your Credentials'),
+                            ));
+                            Navigator.pushNamed(context, AppRoutes.loginScreen);
+                          } else {
                             // TODO: Show error
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Registration Failed'),
-                              )
-                            );
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              content: Text('Registration Failed'),
+                            ));
                           }
                         }
                       },

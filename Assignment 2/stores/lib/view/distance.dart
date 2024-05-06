@@ -15,31 +15,41 @@ class _DistanceState extends State<Distance> {
 
   @override
   Widget build(BuildContext context) {
-  final StoreModel store = ModalRoute.of(context)!.settings.arguments as StoreModel;
-  double long = distanceController.getlongitude(store.address);
-  double lat = distanceController.getLatitude(store.address);
-  double distance = distanceController.calculateDistance(distanceController.currentPosition.latitude, distanceController.currentPosition.longitude, lat, long);
+    final StoreModel store =
+        ModalRoute.of(context)!.settings.arguments as StoreModel;
+    double long = distanceController.getlongitude(store.address);
+    double lat = distanceController.getLatitude(store.address);
+    double distance = distanceController.calculateDistance(
+        distanceController.currentPosition.latitude,
+        distanceController.currentPosition.longitude,
+        lat,
+        long);
 
     return SafeArea(
-        child: Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "Distance",
-          style: TextStyle(color: Colors.white),
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text(
+            "Distance",
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.purple,
         ),
-        backgroundColor: Colors.purple,
+        body: Container(
+          padding: const EdgeInsets.all(16),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text("Store Name: ${store.name}"),
+            const SizedBox(
+              height: 10,
+            ),
+            Text("Store Address: ${store.address}"),
+            const SizedBox(
+              height: 10,
+            ),
+            Text("Store Distance: $distance Km Away \n"),
+          ]),
+        ),
       ),
-      body: Column(children: [
-        Text("Store Name: \n${store.name}"),
-        const SizedBox(
-          height: 10,
-        ),
-        Text("Store Address: \n${store.address}"),
-        const SizedBox(
-          height: 10,
-        ),
-        Text("Store Distance: $distance Km Away \n"),
-      ]),
-    ));
+    );
   }
 }
