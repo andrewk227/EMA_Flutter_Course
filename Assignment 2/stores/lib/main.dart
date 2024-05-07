@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:stores/model/heart_icon_model.dart';
+// import 'package:stores/model/heart_icon_model.dart';
 import 'package:stores/model/store.dart';
 import 'package:stores/routes/routes.dart';
 import 'package:provider/provider.dart';

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:stores/controller/favourite_controller.dart';
 import 'package:stores/controller/store_controller.dart';
+import 'package:stores/model/store.dart';
 import 'package:stores/view/add_store.dart';
 import 'package:stores/view/favourites.dart';
 
@@ -75,7 +76,7 @@ class _StoresPageState extends State<StoresPage> {
                           ),
                           child: ListTile(
                             leading: const Icon(Icons.store),
-                            trailing: Consumer(
+                            trailing: Consumer<StoreModel>(
                                 builder: (context, storeModel, child) =>
                                     IconButton(
                                       icon: snapshot.data![index].isFavorite
@@ -89,8 +90,7 @@ class _StoresPageState extends State<StoresPage> {
                                             await controller.addFavorite(
                                                 snapshot.data![index].id);
                                         if (result) {
-                                          snapshot.data![index]
-                                              .toggleFavorite();
+                                          storeModel.toggleFavorite();
                                           print("Added Successfully");
                                         } else {
                                           print("Error while adding");
