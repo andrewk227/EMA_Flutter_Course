@@ -28,24 +28,22 @@ class _AddStoreState extends State<AddStore> {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => StoresPage()),
-              );
+              Navigator.pushNamed(context, AppRoutes.storesScreen);
             },
             icon: const Icon(Icons.home),
             color: Colors.white,
           ),
           IconButton(
             onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => Favourites()));
+              Navigator.pushNamed(context, AppRoutes.favouritesScreen);
             },
             icon: const Icon(Icons.favorite),
             color: Colors.white,
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, AppRoutes.profileScreen);
+            },
             icon: const Icon(Icons.person),
             color: Colors.white,
           ),
@@ -90,14 +88,16 @@ class _AddStoreState extends State<AddStore> {
                   controller.snackBar = const SnackBar(
                     content: Text("Store Added Successfully"),
                   );
-                ScaffoldMessenger.of(context).showSnackBar(controller.snackBar);
-                Navigator.pop(context);
-                Navigator.pushNamed(context, AppRoutes.storesScreen);
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(controller.snackBar);
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, AppRoutes.storesScreen);
                 } else {
                   controller.snackBar = const SnackBar(
                     content: Text("Store Can't Added"),
                   );
-                ScaffoldMessenger.of(context).showSnackBar(controller.snackBar);
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(controller.snackBar);
                 }
               },
               icon: const Icon(

@@ -3,6 +3,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:stores/model/store.dart';
 
 class FavouriteController extends GetxController {
   static FavouriteController get instance => Get.find();
@@ -12,7 +13,7 @@ class FavouriteController extends GetxController {
   final storage = FlutterSecureStorage();
   late List<dynamic> favourites;
 
-  Future<List> fetchFavourites() async {
+  Future<List<StoreModel>> fetchFavourites() async {
     List<dynamic> data = [];
     String HOST = "http://192.168.1.13:8000";
     String? token = await storage.read(key: "access_token");
@@ -38,7 +39,20 @@ class FavouriteController extends GetxController {
       print(e);
     }
     favourites = data;
-    return data;
+
+    List<StoreModel> stores = [];
+
+    for (int i = 0; i < data.length; i++) {
+      StoreModel storeInstance =
+          StoreModel(id: data[i][0], name: data[i][1], address: data[i][2]);
+      if (FavouriteController.instance.isFavorite(storeInstance.id)) {
+        storeInstance.isFavorite = true;
+      }
+      stores.add(storeInstance);
+    }
+
+    return stores;
+    // return data;
   }
 
   bool isFavorite(int id) {

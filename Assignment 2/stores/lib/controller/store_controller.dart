@@ -51,7 +51,7 @@ class StoreController extends GetxController {
     return stores;
   }
 
-  Future<bool> addFavorite(int id) async {
+  Future<bool> toggleFavorite(int id) async {
     String HOST = "http://192.168.1.13:8000";
     String? token = await storage.read(key: "access_token");
     if (token == null) {

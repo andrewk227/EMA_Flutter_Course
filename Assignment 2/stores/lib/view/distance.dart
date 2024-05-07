@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stores/controller/distance_controller.dart';
 import 'package:stores/model/store.dart';
+import 'package:stores/routes/routes.dart';
 
 class Distance extends StatefulWidget {
   const Distance({super.key});
@@ -32,21 +33,53 @@ class _DistanceState extends State<Distance> {
             "Distance",
             style: TextStyle(color: Colors.white),
           ),
+          actions: [
+            IconButton(
+              onPressed: () {
+                Navigator.pushNamed(context, AppRoutes.profileScreen);
+              },
+              icon: const Icon(Icons.person),
+              color: Colors.white,
+            ),
+            IconButton(
+              onPressed: () {
+                Navigator.pushNamed(context, AppRoutes.storesScreen);
+              },
+              icon: const Icon(Icons.home),
+              color: Colors.white,
+            ),
+            IconButton(
+              onPressed: () {
+                Navigator.pushNamed(context, AppRoutes.favouritesScreen);
+              },
+              icon: const Icon(Icons.favorite),
+              color: Colors.white,
+            ),
+          ],
           backgroundColor: Colors.purple,
         ),
         body: Container(
           padding: const EdgeInsets.all(16),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text("Store Name: ${store.name}"),
+            Text(
+              "Store Name: ${store.name}",
+              style: const TextStyle(fontSize: 20),
+            ),
             const SizedBox(
               height: 10,
             ),
-            Text("Store Address: ${store.address}"),
+            Text(
+              "Store Address: ${store.address}",
+              style: const TextStyle(fontSize: 20),
+            ),
             const SizedBox(
               height: 10,
             ),
-            Text("Store Distance: $distance Km Away \n"),
+            Text(
+              "Store Distance: $distance Km Away \n",
+              style: const TextStyle(fontSize: 20),
+            ),
           ]),
         ),
       ),
