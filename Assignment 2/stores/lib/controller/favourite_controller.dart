@@ -9,6 +9,7 @@ class FavouriteController extends GetxController {
   final name = TextEditingController();
   final address = TextEditingController();
   final storage = FlutterSecureStorage();
+  late List<dynamic> favourites; 
 
   Future<List> fetchFavourites() async {
     List<dynamic> data = [];
@@ -35,6 +36,17 @@ class FavouriteController extends GetxController {
     catch (e) {
       print(e);
     }
+    favourites = data; 
     return data;
+  }
+
+  bool isFavorite(int id) {
+    FavouriteController.instance.favourites;
+    for (var i = 0; i < FavouriteController.instance.favourites.length; i++) {
+      if (FavouriteController.instance.favourites[i][0] == id) {
+        return true;
+      }
+    }
+    return false;
   }
 }

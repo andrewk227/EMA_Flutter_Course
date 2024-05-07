@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:stores/controller/favourite_controller.dart';
 class StoreController extends GetxController {
   static StoreController get instance => Get.find();
 
@@ -11,6 +12,8 @@ class StoreController extends GetxController {
   final storage = FlutterSecureStorage();
 
   Future<List<dynamic>> getStores() async {
+    await FavouriteController.instance.fetchFavourites();
+
     String HOST = "http://192.168.1.13:8000";
     List<dynamic> data = [];
     String? token = await storage.read(key: "access_token");

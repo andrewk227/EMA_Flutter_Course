@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:stores/controller/favourite_controller.dart';
 import 'package:stores/controller/store_controller.dart';
 import 'package:stores/view/add_store.dart';
 import 'package:stores/view/favourites.dart';
@@ -13,6 +14,7 @@ class StoresPage extends StatefulWidget {
 
 class _StoresPageState extends State<StoresPage> {
   StoreController controller = Get.put(StoreController());
+  FavouriteController favouriteController = Get.put(FavouriteController());
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +60,6 @@ class _StoresPageState extends State<StoresPage> {
               return const Center(child: CircularProgressIndicator());
             }
             if (snapshot.hasData) {
-              print(snapshot.data);
               return ListView.builder(
                   padding: const EdgeInsets.all(16),
                   itemCount: snapshot.data!.length,
@@ -74,7 +75,7 @@ class _StoresPageState extends State<StoresPage> {
                           child: ListTile(
                             leading: const Icon(Icons.store),
                             trailing: IconButton(
-                              icon: const Icon(Icons.favorite_border),
+                              icon: favouriteController.isFavorite(snapshot.data![index][0]) ? const Icon(Icons.favorite) : const Icon(Icons.favorite_border),
                               onPressed: () async {
                                 bool result = await controller
                                     .addFavorite(snapshot.data![index][0]);
