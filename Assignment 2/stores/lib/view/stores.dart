@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 import 'package:stores/controller/favourite_controller.dart';
 import 'package:stores/controller/store_controller.dart';
 import 'package:stores/view/add_store.dart';
@@ -74,20 +75,30 @@ class _StoresPageState extends State<StoresPage> {
                           ),
                           child: ListTile(
                             leading: const Icon(Icons.store),
-                            trailing: IconButton(
-                              icon: favouriteController.isFavorite(snapshot.data![index][0]) ? const Icon(Icons.favorite) : const Icon(Icons.favorite_border),
-                              onPressed: () async {
-                                bool result = await controller
-                                    .addFavorite(snapshot.data![index][0]);
-                                if (result) {
-                                  print("Added Successfully");
-                                } else {
-                                  print("Error while adding");
-                                }
-                              },
-                            ),
-                            title: Text(snapshot.data![index][1]),
-                            subtitle: Text(snapshot.data![index][2]),
+                            trailing: Consumer(
+                                builder: (context, storeModel, child) =>
+                                    IconButton(
+                                      icon: snapshot.data![index].isFavorite
+                                          ? const Icon(
+                                              Icons.favorite,
+                                              color: Colors.purple,
+                                            )
+                                          : const Icon(Icons.favorite_border),
+                                      onPressed: () async {
+                                        bool result =
+                                            await controller.addFavorite(
+                                                snapshot.data![index].id);
+                                        if (result) {
+                                          snapshot.data![index]
+                                              .toggleFavorite();
+                                          print("Added Successfully");
+                                        } else {
+                                          print("Error while adding");
+                                        }
+                                      },
+                                    )),
+                            title: Text(snapshot.data![index].name),
+                            subtitle: Text(snapshot.data![index].address),
                           ),
                         ),
                         const SizedBox(height: 10),

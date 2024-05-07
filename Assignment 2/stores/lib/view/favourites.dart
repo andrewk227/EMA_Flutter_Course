@@ -58,21 +58,27 @@ class _FavouritesState extends State<Favourites> {
                         ),
                         child: ListTile(
                           leading: const Icon(Icons.store),
-                          trailing: IconButton(
-                            icon: const Icon(Icons.location_on),
-                            onPressed: () async {
-                              StoreModel store = StoreModel(
-                                  name: snapshot.data![index][1],
-                                  address: snapshot.data![index][2]);
-                              await distanceController.getCurrentPosition();
-                              AppRoutes.navigateToDistanceScreen(context, store);
-                            },
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.location_on),
+                                onPressed: () async {
+                                  StoreModel store = StoreModel(
+                                      id: snapshot.data![index][0],
+                                      name: snapshot.data![index][1],
+                                      address: snapshot.data![index][2]);
+                                  await distanceController.getCurrentPosition();
+                                  AppRoutes.navigateToDistanceScreen(
+                                      context, store);
+                                },
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.favorite_border),
+                                onPressed: () {},
+                              ),
+                            ],
                           ),
-                          // IconButton(
-                          //   icon: const Icon(Icons.favorite_border),
-                          //   onPressed: () {},
-                          // ),
-
                           title: Text(snapshot.data![index][1]),
                           subtitle: Text(snapshot.data![index][2]),
                         ),

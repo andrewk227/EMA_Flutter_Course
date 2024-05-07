@@ -32,11 +32,11 @@ class SignUpController extends GetxController {
       "email": email,
       "id": id,
       "password": password,
-      "confirmation_password":confirmationPassword,
-      "gender":gender?.index,
-      "level":level?.index,
-      "imageURL":null,
-      };
+      "confirmation_password": confirmationPassword,
+      "gender": gender?.index,
+      "level": level?.index,
+      "imageURL": null,
+    };
 
     try {
       final response = await http.post(

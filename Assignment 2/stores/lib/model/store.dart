@@ -1,8 +1,19 @@
-class StoreModel {
+import 'package:flutter/material.dart';
+
+class StoreModel extends ChangeNotifier {
+  int id = 0;
   String name = "Store X";
   String address = "None";
-  String longitude = "0";
-  String latitude = "0";
+  bool isFavorite = false;
 
-  StoreModel({required this.name, required this.address});
+  StoreModel(
+      {this.id = 0,
+      this.name = "Store X",
+      this.address = "None",
+      this.isFavorite = false});
+
+  void toggleFavorite() {
+    isFavorite = !isFavorite;
+    notifyListeners();
+  }
 }

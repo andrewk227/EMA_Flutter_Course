@@ -27,16 +27,16 @@ class LoginController extends GetxController {
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
-       body: jsonEncode(data), 
+        body: jsonEncode(data),
       );
 
       if (response.statusCode == 200) {
         print(response.body);
         Map<String, dynamic> responseJson = jsonDecode(response.body);
-        await storage.write(key: 'access_token', value: responseJson['access_token']);
+        await storage.write(
+            key: 'access_token', value: responseJson['access_token']);
         return true;
-      }
-      else{
+      } else {
         return false;
       }
     } catch (e) {

@@ -19,7 +19,11 @@ class _LoginPageState extends State<LoginPage> {
     return SafeArea(
         child: Scaffold(
       appBar: AppBar(
-          backgroundColor: Colors.purple, title: const Text("Login Page")),
+          backgroundColor: Colors.purple,
+          title: const Text(
+            "Login Page",
+            style: TextStyle(color: Colors.white),
+          )),
       body: Form(
           key: _key,
           child: Container(
@@ -28,7 +32,7 @@ class _LoginPageState extends State<LoginPage> {
                 Column(mainAxisAlignment: MainAxisAlignment.start, children: [
               const Text(
                 "Login",
-                style: TextStyle(fontSize: 30, color: Colors.white),
+                style: TextStyle(fontSize: 30, color: Colors.black),
               ),
               const SizedBox(height: 30),
               TextFormField(

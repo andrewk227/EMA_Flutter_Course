@@ -3,13 +3,14 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+
 class FavouriteController extends GetxController {
   static FavouriteController get instance => Get.find();
 
   final name = TextEditingController();
   final address = TextEditingController();
   final storage = FlutterSecureStorage();
-  late List<dynamic> favourites; 
+  late List<dynamic> favourites;
 
   Future<List> fetchFavourites() async {
     List<dynamic> data = [];
@@ -23,20 +24,20 @@ class FavouriteController extends GetxController {
     print(token);
 
     try {
-      final response = await http.get(Uri.parse("$HOST/store/favorite") , headers: <String, String>{
+      final response = await http
+          .get(Uri.parse("$HOST/store/favorite"), headers: <String, String>{
         "access-token": token,
-         'Content-Type': 'application/json; charset=UTF-8',
+        'Content-Type': 'application/json; charset=UTF-8',
       });
 
       if (response.statusCode == 200) {
         data = jsonDecode(response.body);
         print(data);
       }
-    }
-    catch (e) {
+    } catch (e) {
       print(e);
     }
-    favourites = data; 
+    favourites = data;
     return data;
   }
 
