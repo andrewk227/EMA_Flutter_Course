@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:stores_local/controller/favourite_controller.dart';
 import 'package:stores_local/controller/store_controller.dart';
 import 'package:stores_local/model/store.dart';
+import 'package:stores_local/routes/routes.dart';
 import 'package:stores_local/view/add_store.dart';
 import 'package:stores_local/view/favourites.dart';
 
@@ -41,10 +42,7 @@ class _StoresPageState extends State<StoresPage> {
           ),
           IconButton(
             onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => const StoresPage()),
-              );
+              
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => const Favourites()));
             },
@@ -52,7 +50,9 @@ class _StoresPageState extends State<StoresPage> {
             color: Colors.white,
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, AppRoutes.profileScreen);
+            },
             icon: const Icon(Icons.person),
             color: Colors.white,
           ),

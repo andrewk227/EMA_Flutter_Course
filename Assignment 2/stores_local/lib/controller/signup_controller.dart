@@ -31,9 +31,11 @@ class SignUpController extends GetxController {
 
       var ids = await db.selectData(selectID);
       var emails = await db.selectData(selectEmail);
-
+  
       if (ids.length == 0 && emails.length == 0) {
-        String insertQuery = "INSERT INTO Students VALUES ('$id' , '$name' , '$email' ,'$password', '$gender' , '$level' , 'null');";
+        int? gen = gender?.index;
+        int? lvl = level?.index;
+        String insertQuery = "INSERT INTO Students VALUES ('$id' , '$name' , '$email' ,'$password', '$gen' , '$lvl' , 'null');";
         var res = await db.insertData(insertQuery);
         print(res);
         return true;
