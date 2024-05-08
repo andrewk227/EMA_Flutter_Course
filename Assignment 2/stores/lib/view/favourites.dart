@@ -32,16 +32,16 @@ class _FavouritesState extends State<Favourites> {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.pushNamed(context, AppRoutes.profileScreen);
+              Navigator.pushNamed(context, AppRoutes.storesScreen);
             },
-            icon: const Icon(Icons.person),
+            icon: const Icon(Icons.home),
             color: Colors.white,
           ),
           IconButton(
             onPressed: () {
-              Navigator.pushNamed(context, AppRoutes.storesScreen);
+              Navigator.pushNamed(context, AppRoutes.profileScreen);
             },
-            icon: const Icon(Icons.home),
+            icon: const Icon(Icons.person),
             color: Colors.white,
           ),
         ],
