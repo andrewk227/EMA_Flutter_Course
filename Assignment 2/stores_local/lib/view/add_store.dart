@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stores_local/controller/adding_store_controller.dart';
+import 'package:stores_local/routes/routes.dart';
 // import 'package:stores_local/model/store.dart';
 import 'package:stores_local/view/favourites.dart';
 import 'package:stores_local/view/stores.dart';
@@ -95,6 +96,7 @@ class _AddStoreState extends State<AddStore> {
                   );
                 }
                 ScaffoldMessenger.of(context).showSnackBar(controller.snackBar);
+                Navigator.pushReplacementNamed(context, AppRoutes.storesScreen);
               },
               icon: const Icon(
                 Icons.add,

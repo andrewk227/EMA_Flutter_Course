@@ -47,18 +47,14 @@ class StoreController extends GetxController {
           String deleteQuery = "DELETE FROM Favorite_Stores WHERE student_id = '$token' AND store_id = '$id';";
           var response = await db.deleteData(deleteQuery);
 
-          FavouriteController.instance.favourites.removeAt(i);
-
           print(response);
-          return false;
+          return true;
         }
       }
 
       String insertQuery = "INSERT INTO Favorite_Stores (student_id , store_id) VALUES ('$token' , '$id');";
       var response = await db.insertData(insertQuery);
 
-      FavouriteController.instance.favourites.add({'student_id': token, 'store_id' : id});
-      
       print(response);
       return true;
     }

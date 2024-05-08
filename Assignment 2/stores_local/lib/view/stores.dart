@@ -93,9 +93,9 @@ class _StoresPageState extends State<StoresPage> {
                                 onPressed: () async {
                                   bool result = await controller
                                       .toggleFavorite(snapshot.data![index].id);
-                                  storeModel.toggleFavorite();
                                   if (result) {
-                                    // snapshot.data![index].toggleFavorite();
+                                    snapshot.data![index].toggleFavorite();
+                                    storeModel.toggleFavorite();
                                     print("Added Successfully");
                                   } else {
                                     print("Error while adding");
