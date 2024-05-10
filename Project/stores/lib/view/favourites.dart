@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import 'package:stores_local/controller/distance_controller.dart';
-import 'package:stores_local/controller/favourite_controller.dart';
-import 'package:stores_local/model/store.dart';
-import 'package:stores_local/routes/routes.dart';
+import 'package:stores/controller/distance_controller.dart';
+import 'package:stores/controller/favourite_controller.dart';
+import 'package:stores/controller/store_controller.dart';
+import 'package:stores/model/store.dart';
+import 'package:stores/routes/routes.dart';
+import 'package:stores/view/add_store.dart';
 
 class Favourites extends StatefulWidget {
   const Favourites({super.key});
@@ -16,6 +18,7 @@ class Favourites extends StatefulWidget {
 class _FavouritesState extends State<Favourites> {
   FavouriteController favouriteController = Get.put(FavouriteController());
   DistanceController distanceController = Get.put(DistanceController());
+  StoreController storeController = Get.put(StoreController());
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +30,13 @@ class _FavouritesState extends State<Favourites> {
           style: TextStyle(color: Colors.white),
         ),
         actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.pushNamed(context, AppRoutes.storesScreen);
+            },
+            icon: const Icon(Icons.home),
+            color: Colors.white,
+          ),
           IconButton(
             onPressed: () {
               Navigator.pushNamed(context, AppRoutes.profileScreen);
@@ -68,9 +78,9 @@ class _FavouritesState extends State<Favourites> {
                                   icon: const Icon(Icons.location_on),
                                   onPressed: () async {
                                     StoreModel store = StoreModel(
-                                        name: snapshot.data![index]['name'],
-                                        address: snapshot.data![index]
-                                            ['location']);
+                                        id: snapshot.data![index].id,
+                                        name: snapshot.data![index].name,
+                                        address: snapshot.data![index].address);
                                     await distanceController
                                         .getCurrentPosition();
                                     AppRoutes.navigateToDistanceScreen(
@@ -80,15 +90,22 @@ class _FavouritesState extends State<Favourites> {
                                 IconButton(
                                   icon: const Icon(Icons.delete),
                                   onPressed: () async {
-                                    favouriteController.deleteFavourite(
-                                        snapshot.data![index]['id']);
-                                    storeModel.toggleFavorite();
+                                    bool result =
+                                        await storeController.toggleFavorite(
+                                            snapshot.data![index].id);
+                                    if (result) {
+                                      snapshot.data![index].toggleFavorite();
+                                      print("Added Successfully");
+                                      storeModel.toggleFavorite();
+                                    } else {
+                                      print("Error while adding");
+                                    }
                                   },
                                 ),
                               ],
                             ),
-                            title: Text(snapshot.data![index]['name']),
-                            subtitle: Text(snapshot.data![index]['location']),
+                            title: Text(snapshot.data![index].name),
+                            subtitle: Text(snapshot.data![index].address),
                           ),
                         ),
                         const SizedBox(height: 10),
