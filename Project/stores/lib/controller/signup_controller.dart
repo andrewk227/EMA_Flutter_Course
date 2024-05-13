@@ -60,6 +60,7 @@ class SignUpController extends GetxController {
       "level": level?.index,
       "imageURL": null,
     };
+    
 
     try {
       final response = await http.post(

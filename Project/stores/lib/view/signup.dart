@@ -176,7 +176,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 TextFormField(
                   // controller: signUpController.confirmationPasswordController,
                   onChanged: (value) =>
-                      signUpController.setConfirmationPassword,
+                      signUpController.setConfirmationPassword(value),
                   validator: (value) {
                     if (value == null || value.length < 8) {
                       return "Require atleast 8 Characters";
