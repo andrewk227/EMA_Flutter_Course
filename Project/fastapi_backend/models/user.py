@@ -1,19 +1,19 @@
-from pydantic import BaseModel
+from pydantic import BaseModel , EmailStr
 from typing import Optional
 
 class User(BaseModel):
     id: str
     name: str
-    email: str
+    email: EmailStr
     gender: int
     level: int
     password: str
-    imageURL: str
+    imageURL: Optional[str]
 
 class RegisterUser(BaseModel):
     id: str
     name: str
-    email: str
+    email: EmailStr
     gender: int
     level: int
     password: str
