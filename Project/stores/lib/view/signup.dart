@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stores/controller/signup_controller.dart';
 import 'package:stores/routes/routes.dart';
-import 'package:stores/view/stores.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -13,7 +12,7 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   final _formKey = GlobalKey<FormState>();
-  SignUpController controller = Get.put(SignUpController());
+  SignUpController signUpController = Get.put(SignUpController());
 
   @override
   Widget build(BuildContext context) {
@@ -41,12 +40,13 @@ class _SignUpPageState extends State<SignUpPage> {
                   style: TextStyle(fontWeight: FontWeight.bold),
                 )),
                 TextFormField(
-                  controller: controller.nameController,
+                  // controller: controller.nameController,
                   decoration: const InputDecoration(
                     prefixIcon: Icon(Icons.person_2_outlined),
                     contentPadding: EdgeInsets.all(10),
                     hintText: "Name",
                   ),
+                  onChanged: (value) => signUpController.setName(value),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return "This Field is mandatory";
@@ -63,23 +63,24 @@ class _SignUpPageState extends State<SignUpPage> {
                 RadioListTile(
                     title: const Text("Male"),
                     value: Gender.Male,
-                    groupValue: controller.gender,
+                    groupValue: signUpController.gender,
                     onChanged: (value) {
                       setState(() {
-                        controller.gender = value;
+                        signUpController.gender = value;
                       });
                     }),
                 RadioListTile(
                     title: const Text("Female"),
                     value: Gender.Female,
-                    groupValue: controller.gender,
+                    groupValue: signUpController.gender,
                     onChanged: (value) {
                       setState(() {
-                        controller.gender = value;
+                        signUpController.gender = value;
                       });
                     }),
                 TextFormField(
-                  controller: controller.emailController,
+                  // controller: signUpController.emailController,
+                  onChanged: (value) => signUpController.setEmail(value),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return "This Field is mandatory";
@@ -97,7 +98,8 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                 ),
                 TextFormField(
-                  controller: controller.idController,
+                  // controller: signUpController.idController,
+                  onChanged: (value) => signUpController.setId(value),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return "This Field is Mandatory";
@@ -120,37 +122,37 @@ class _SignUpPageState extends State<SignUpPage> {
                 RadioListTile(
                     title: const Text("First Level"),
                     value: Level.First,
-                    groupValue: controller.level,
+                    groupValue: signUpController.level,
                     onChanged: (value) {
                       setState(() {
-                        controller.level = value;
+                        signUpController.level = value;
                       });
                     }),
                 RadioListTile(
                     title: const Text("Second Level"),
                     value: Level.Second,
-                    groupValue: controller.level,
+                    groupValue: signUpController.level,
                     onChanged: (value) {
                       setState(() {
-                        controller.level = value;
+                        signUpController.level = value;
                       });
                     }),
                 RadioListTile(
                     title: const Text("Third Level"),
                     value: Level.Third,
-                    groupValue: controller.level,
+                    groupValue: signUpController.level,
                     onChanged: (value) {
                       setState(() {
-                        controller.level = value;
+                        signUpController.level = value;
                       });
                     }),
                 RadioListTile(
                     title: const Text("Fourth Level"),
                     value: Level.Fourth,
-                    groupValue: controller.level,
+                    groupValue: signUpController.level,
                     onChanged: (value) {
                       setState(() {
-                        controller.level = value;
+                        signUpController.level = value;
                       });
                     }),
                 TextFormField(
@@ -160,7 +162,8 @@ class _SignUpPageState extends State<SignUpPage> {
                     }
                     return null;
                   },
-                  controller: controller.passwordController,
+                  // controller: signUpController.passwordController,
+                  onChanged: (value) => signUpController.setPassword(value),
                   obscureText: true,
                   enableSuggestions: false,
                   autocorrect: false,
@@ -171,12 +174,14 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                 ),
                 TextFormField(
-                  controller: controller.confirmationPasswordController,
+                  // controller: signUpController.confirmationPasswordController,
+                  onChanged: (value) =>
+                      signUpController.setConfirmationPassword,
                   validator: (value) {
                     if (value == null || value.length < 8) {
                       return "Require atleast 8 Characters";
                     }
-                    if (value != controller.passwordController.text) {
+                    if (value != signUpController.passwordController.value) {
                       return "Confirmation password doesn't match the password";
                     }
                     return null;
@@ -194,7 +199,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   child: ElevatedButton(
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
-                          bool result = await controller.register();
+                          bool result = await signUpController.register();
                           if (result) {
                             // TODO: Navigate to login page
                             ScaffoldMessenger.of(context)
