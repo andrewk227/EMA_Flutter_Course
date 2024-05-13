@@ -1,18 +1,27 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'dart:convert';
-import 'package:http/http.dart' as http;
+
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'package:rxdart/rxdart.dart';
 import 'package:stores/controller/favourite_controller.dart';
-import 'package:stores/model/store.dart';
 import 'package:stores/global.dart';
+import 'package:stores/model/store.dart';
 
 class StoreController extends GetxController {
   static StoreController get instance => Get.find();
 
-  final name = TextEditingController();
-  final address = TextEditingController();
+  final name = BehaviorSubject<String>();
+  final address = BehaviorSubject<String>();
   final storage = FlutterSecureStorage();
+
+// getters to get the value of the variables
+  Stream<String> get name$ => name.stream;
+  Stream<String> get address$ => address.stream;
+
+// Setter to update the value of the variables
+  Function(String) get setName => name.sink.add;
+  Function(String) get setAddress => address.sink.add;
 
   Future<List<StoreModel>> getStores() async {
     await FavouriteController.instance.fetchFavourites();
@@ -73,5 +82,11 @@ class StoreController extends GetxController {
       print(e);
     }
     return false;
+  }
+
+  void dispose() {
+    name.close();
+    address.close();
+    super.dispose();
   }
 }
