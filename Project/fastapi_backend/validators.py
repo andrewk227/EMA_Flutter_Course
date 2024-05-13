@@ -45,17 +45,23 @@ def valid_password(password:str):
 def equal(password:str , confirmation_password:str):
     return password == confirmation_password
 
-def valid_store(store_data:dict):
-    mandatory_fields  = ['name' , 'location']
-    for field in mandatory_fields:
-        if field not in store_data and store_data[field]:
-            return False
-    return True
-
-
 def validate_access_token(access_token:str):
     data = decode_token(access_token)
     if not data:
         raise HTTPException(status_code=403 ,detail="Your Auth Token has Expired, Please Login Again.")
     
     return data['id']
+
+def valid_shop(shop:dict):
+    mandatory_fields  = ['name' , 'type' , 'latitude' , 'longitude']
+    for field in mandatory_fields:
+        if field not in shop and shop[field]:
+            return False
+    return True
+
+def valid_product(product:dict):
+    mandatory_fields  = ['name' , 'price']
+    for field in mandatory_fields:
+        if field not in product and product[field]:
+            return False
+    return True
