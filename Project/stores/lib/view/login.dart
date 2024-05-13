@@ -12,7 +12,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  LoginController controller = Get.put(LoginController());
+  LoginController logInController = Get.put(LoginController());
   final _key = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -42,7 +42,7 @@ class _LoginPageState extends State<LoginPage> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     )),
-                onChanged: (value) => controller.setId(value),
+                onChanged: (value) => logInController.setId(value),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return "Enter ID";
@@ -64,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     )),
-                onChanged: (value) => controller.setPassword(value),
+                onChanged: (value) => logInController.setPassword(value),
                 validator: (value) {
                   if (value == null || value.length < 8) {
                     return "Enter Password";
@@ -75,20 +75,20 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 20),
               ElevatedButton(
                   onPressed: () async {
-                    // if (_key.currentState!.validate()) {
-                    //   bool result = await controller.login();
-                    //   print(result);
-                    //   if (result) {
-                    //     // navigate to home
-                    //     Navigator.pushNamed(context, AppRoutes.storesScreen);
-                    //   } else {
-                    //     // show error
-                    //     ScaffoldMessenger.of(context)
-                    //         .showSnackBar(const SnackBar(
-                    //       content: Text("Login Failed"),
-                    //     ));
-                    //   }
-                    // }
+                    if (_key.currentState!.validate()) {
+                      bool result = await logInController.login();
+                      print(result);
+                      if (result) {
+                        // navigate to home
+                        Navigator.pushNamed(context, AppRoutes.storesScreen);
+                      } else {
+                        // show error
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          content: Text("Login Failed"),
+                        ));
+                      }
+                    }
                   },
                   child: const Text("Enter")),
               const SizedBox(height: 20),

@@ -21,6 +21,7 @@ class SignUpController extends GetxController {
   final idController = BehaviorSubject<String>();
   final confirmationPasswordController = BehaviorSubject<String>();
 
+// Getters
   Stream<String> get password$ => passwordController.stream;
   Stream<String> get name$ => nameController.stream;
   Stream<String> get email$ => emailController.stream;
@@ -32,6 +33,7 @@ class SignUpController extends GetxController {
   Stream<Level?> get level$ =>
       level == null ? const Stream.empty() : Stream.value(level);
 
+// Setters
   Function(String) get setPassword => passwordController.sink.add;
   Function(String) get setName => nameController.sink.add;
   Function(String) get setEmail => emailController.sink.add;

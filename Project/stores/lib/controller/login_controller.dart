@@ -13,9 +13,11 @@ class LoginController extends GetxController {
   final password = BehaviorSubject<String>();
   final storage = FlutterSecureStorage();
 
+// getters to get the value of the variables
   Stream<String> get id$ => id.stream;
   Stream<String> get password$ => password.stream;
 
+// Setter to update the value of the variables
   Function(String) get setId => id.sink.add;
   Function(String) get setPassword => password.sink.add;
 
@@ -34,7 +36,7 @@ class LoginController extends GetxController {
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
-        body: jsonEncode({'id': id, 'password': password}),
+        body: jsonEncode(data),
       );
 
       if (response.statusCode == 200) {
