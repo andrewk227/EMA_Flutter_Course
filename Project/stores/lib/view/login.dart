@@ -36,13 +36,13 @@ class _LoginPageState extends State<LoginPage> {
               ),
               const SizedBox(height: 30),
               TextFormField(
-                controller: controller.id,
                 decoration: InputDecoration(
                     hintText: "ID",
                     prefixIcon: const Icon(Icons.person),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     )),
+                onChanged: (value) => controller.setId(value),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return "Enter ID";
@@ -54,7 +54,6 @@ class _LoginPageState extends State<LoginPage> {
                 height: 20,
               ),
               TextFormField(
-                controller: controller.password,
                 decoration: InputDecoration(
                     hintText: "Password",
                     prefixIcon: const Icon(Icons.lock),
@@ -65,6 +64,7 @@ class _LoginPageState extends State<LoginPage> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     )),
+                onChanged: (value) => controller.setPassword(value),
                 validator: (value) {
                   if (value == null || value.length < 8) {
                     return "Enter Password";
@@ -75,20 +75,20 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 20),
               ElevatedButton(
                   onPressed: () async {
-                    if (_key.currentState!.validate()) {
-                      bool result = await controller.login();
-                      print(result);
-                      if (result) {
-                        // navigate to home
-                        Navigator.pushNamed(context, AppRoutes.storesScreen);
-                      } else {
-                        // show error
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                          content: Text("Login Failed"),
-                        ));
-                      }
-                    }
+                    // if (_key.currentState!.validate()) {
+                    //   bool result = await controller.login();
+                    //   print(result);
+                    //   if (result) {
+                    //     // navigate to home
+                    //     Navigator.pushNamed(context, AppRoutes.storesScreen);
+                    //   } else {
+                    //     // show error
+                    //     ScaffoldMessenger.of(context)
+                    //         .showSnackBar(const SnackBar(
+                    //       content: Text("Login Failed"),
+                    //     ));
+                    //   }
+                    // }
                   },
                   child: const Text("Enter")),
               const SizedBox(height: 20),

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:stores/model/store.dart';
+import '../global.dart';
 
 class FavouriteController extends GetxController {
   static FavouriteController get instance => Get.find();
@@ -15,7 +16,6 @@ class FavouriteController extends GetxController {
 
   Future<List<StoreModel>> fetchFavourites() async {
     List<dynamic> data = [];
-    String HOST = "http://192.168.1.13:8000";
     String? token = await storage.read(key: "access_token");
 
     if (token == null) {

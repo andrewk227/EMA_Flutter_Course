@@ -3,6 +3,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import '../global.dart';
 
 class AddStoreController extends GetxController {
   static AddStoreController get instance => Get.find();
@@ -13,7 +14,6 @@ class AddStoreController extends GetxController {
   SnackBar snackBar = const SnackBar(content: Text(""));
 
   Future<bool> addStore() async {
-    String HOST = "http://192.168.1.13:8000";
     String name = this.name.text;
     String address = this.address.text;
     String? token = await storage.read(key: "access_token");

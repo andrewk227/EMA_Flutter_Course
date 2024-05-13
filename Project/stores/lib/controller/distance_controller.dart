@@ -56,7 +56,7 @@ class DistanceController extends GetxController {
 
   double getLatitude(String address) {
     String lat = address.split(",")[0];
-    return double.parse(lat); 
+    return double.parse(lat);
   }
 
   double getlongitude(String address) {
@@ -67,9 +67,10 @@ class DistanceController extends GetxController {
   double roundTo(double number, int decimalPlaces) {
     double mod = double.parse(pow(10.0, decimalPlaces).toString());
     return ((number * mod).roundToDouble() / mod);
-}
+  }
 
-  double calculateDistance(double lat1, double lon1,double lat2,double lon2) {
-    return roundTo(Geolocator.distanceBetween(lat1, lon1, lat2, lon2) / 1000 , 2);
+  double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
+    return roundTo(
+        Geolocator.distanceBetween(lat1, lon1, lat2, lon2) / 1000, 2);
   }
 }

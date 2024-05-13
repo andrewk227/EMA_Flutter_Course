@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:stores/controller/favourite_controller.dart';
 import 'package:stores/model/store.dart';
+import 'package:stores/global.dart';
 
 class StoreController extends GetxController {
   static StoreController get instance => Get.find();
@@ -16,7 +17,6 @@ class StoreController extends GetxController {
   Future<List<StoreModel>> getStores() async {
     await FavouriteController.instance.fetchFavourites();
 
-    String HOST = "http://192.168.1.13:8000";
     List<dynamic> data = [];
     String? token = await storage.read(key: "access_token");
     if (token == null) {
@@ -52,7 +52,6 @@ class StoreController extends GetxController {
   }
 
   Future<bool> toggleFavorite(int id) async {
-    String HOST = "http://192.168.1.13:8000";
     String? token = await storage.read(key: "access_token");
     if (token == null) {
       return false;

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:rxdart/rxdart.dart';
+import 'package:stores/global.dart';
 
 enum Gender { Male, Female }
 
@@ -13,19 +15,38 @@ class SignUpController extends GetxController {
   Gender? gender;
   Level? level;
   final ScrollController scrollController = ScrollController();
-  final passwordController = TextEditingController();
-  final nameController = TextEditingController();
-  final emailController = TextEditingController();
-  final idController = TextEditingController();
-  final confirmationPasswordController = TextEditingController();
+  final passwordController = BehaviorSubject<String>();
+  final nameController = BehaviorSubject<String>();
+  final emailController = BehaviorSubject<String>();
+  final idController = BehaviorSubject<String>();
+  final confirmationPasswordController = BehaviorSubject<String>();
+
+  Stream<String> get password$ => passwordController.stream;
+  Stream<String> get name$ => nameController.stream;
+  Stream<String> get email$ => emailController.stream;
+  Stream<String> get id$ => idController.stream;
+  Stream<String> get confirmationPassword$ =>
+      confirmationPasswordController.stream;
+  Stream<Gender?> get gender$ =>
+      gender == null ? const Stream.empty() : Stream.value(gender);
+  Stream<Level?> get level$ =>
+      level == null ? const Stream.empty() : Stream.value(level);
+
+  Function(String) get setPassword => passwordController.sink.add;
+  Function(String) get setName => nameController.sink.add;
+  Function(String) get setEmail => emailController.sink.add;
+  Function(String) get setId => idController.sink.add;
+  Function(String) get setConfirmationPassword =>
+      confirmationPasswordController.sink.add;
+  Gender? get setGender => gender = gender;
+  Level? get setLevel => level = level;
 
   Future<bool> register() async {
-    String HOST = "http://192.168.1.13:8000";
-    String name = this.nameController.text;
-    String email = this.emailController.text;
-    String id = this.idController.text;
-    String password = this.passwordController.text;
-    String confirmationPassword = this.confirmationPasswordController.text;
+    String name = nameController.value;
+    String email = emailController.value;
+    String id = idController.value;
+    String password = passwordController.value;
+    String confirmationPassword = confirmationPasswordController.value;
 
     Map<String, dynamic> data = {
       "name": name,

@@ -1,24 +1,31 @@
-import 'package:flutter/material.dart';
+// import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:rxdart/rxdart.dart';
+import 'package:stores/global.dart';
 
 class LoginController extends GetxController {
   static LoginController get instance => Get.find();
 
-  final id = TextEditingController();
-  final password = TextEditingController();
+  final id = BehaviorSubject<String>();
+  final password = BehaviorSubject<String>();
   final storage = FlutterSecureStorage();
 
+  Stream<String> get id$ => id.stream;
+  Stream<String> get password$ => password.stream;
+
+  Function(String) get setId => id.sink.add;
+  Function(String) get setPassword => password.sink.add;
+
   Future<bool> login() async {
-    String HOST = "http://192.168.1.13:8000";
-    String id = this.id.text;
-    String password = this.password.text;
+    String ID = id.value ?? "";
+    String Password = password.value ?? "";
 
     Map<String, dynamic> data = {
-      "id": id,
-      "password": password,
+      "id": ID,
+      "password": Password,
     };
 
     try {
@@ -27,7 +34,7 @@ class LoginController extends GetxController {
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
-        body: jsonEncode(data),
+        body: jsonEncode({'id': id, 'password': password}),
       );
 
       if (response.statusCode == 200) {
@@ -43,5 +50,11 @@ class LoginController extends GetxController {
       print(e);
       return false;
     }
+  }
+
+  void dispose() {
+    id.close();
+    password.close();
+    super.dispose();
   }
 }
