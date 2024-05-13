@@ -14,23 +14,32 @@ imageURL TEXT,
 
 """
 
-""" 
-CREATE TABLE Stores (
+"""
+CREATE TABLE Shops (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name VARCHAR(50) NOT NULL,
-    location VARCHAR(50) NOT NULL 
-)
+    type INTEGER NOT NULL,
+    latitude FLOAT NOT NULL,
+    longitude FLOAT NOT NULL
+    ); 
 """
 
 """
-CREATE TABLE Favorite_Stores (
+CREATE TABLE Products (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    student_id VARCHAR(9) NOT NULL,
-    store_id INTEGER NOT NULL,
-    FOREIGN KEY(student_id) REFERENCES Students(id),
-    FOREIGN KEY(store_id) REFERENCES Stores(id),
-    UNIQUE(student_id, store_id)
-)
+    name VARCHAR(50) NOT NULL,
+    price FLOAT NOT NULL   
+);
+"""
+
+"""
+CREATE TABLE Shops_Products (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    product_id INTEGER NOT NULL,
+    shop_id INTEGER NOT NULL,
+    FOREIGN KEY (product_id) REFERENCES Products(id),
+    FOREIGN KEY (shop_id) REFERENCES Shops(id)
+);
 """
 
 def excute_insert_query(query):

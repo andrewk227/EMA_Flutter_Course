@@ -1,6 +1,6 @@
 from typing import Optional
-from fastapi import FastAPI , HTTPException , Header , Response , status
-from validators import valid_email , valid_id ,valid_name , valid_password , equal , valid_user_creds , valid_user , valid_updated_user , valid_store , validate_access_token
+from fastapi import FastAPI , HTTPException , Header  
+from validators import valid_email , valid_id ,valid_name , valid_password , equal , valid_user_creds , valid_user , valid_updated_user , validate_access_token , valid_shop , valid_product
 from sqlite import excute_insert_query , excute_select_query , excute_update_query , excute_delete_query
 from tokens import generate_token_expire_days , create_access_token , decode_token
 
@@ -111,78 +111,91 @@ def get_user_data(access_token:Optional[str]= Header(None)):
     user = dict(zip(keys , rows))
     return user
 
-# all Stores data
-@app.get("/store")
-def get_store_data(access_token:Optional[str]= Header(None)):
-    validate_access_token(access_token)
-
-    store_query = "SELECT * FROM Stores"
-    rows = excute_select_query(store_query)
-    return rows
-
-@app.post("/store",  status_code=201)
-def create_store(store_data:dict , access_token:Optional[str]= Header(None)) :
-    validate_access_token(access_token)
-
-    if not valid_store(store_data):
-        raise HTTPException(status_code=400 , detail="Missing store Fields")
-        
-    store_create_query = f"INSERT INTO Stores (name , location) VALUES ('{store_data['name']}' , '{store_data['location']}');"
-    excute_insert_query(store_create_query)
-    return store_data 
-
-@app.post("/store/favorite" , status_code=201)
-def add_remove_favorite(store_id:dict ,access_token:Optional[str] = Header(None)):
+@app.post("/shop")
+def create_shop(shop:dict , access_token:Optional[str] = Header(None)):
     ID = validate_access_token(access_token)
 
-    select_query = f"SELECT * FROM Favorite_Stores WHERE store_id = '{store_id['id']}' AND student_id = '{ID}';"
-    rows = excute_select_query(select_query)
-    if rows:
-        delete_query = f"DELETE FROM Favorite_Stores WHERE store_id = '{store_id['id']}' AND student_id = '{ID}';"
-        excute_delete_query(delete_query)
-        return True
+    if not valid_shop(shop):
+        raise HTTPException(status_code=400 , detail="Missing Shop Fields")
 
-    insert_query = f"INSERT INTO Favorite_Stores (student_id , store_id) VALUES ('{ID}' , '{store_id['id']}');"
+    insert_query = f"INSERT INTO Shops ( name , type , latitude , longitude) VALUES ('{shop['name']}' , '{shop['type']}' , {shop['latitude']} , {shop['longitude']} );"
+    excute_insert_query(insert_query)
+    return shop
+
+@app.get("/shop")
+def get_shops(access_token:Optional[str]= Header(None)):
+    ID = validate_access_token(access_token)
+
+    select_query = f"SELECT * FROM Shops;"
+
+    rows = excute_select_query(select_query)
+    
+    return rows
+
+
+@app.get("/shop/products")
+def get_shop_products(shop_id:dict , access_token:Optional[str] = Header(None)):
+    ID = validate_access_token(access_token)
+    shop_id = shop_id['id']
+
+    select_query = f"SELECT * FROM Shops WHERE shop_id = '{shop_id}';"
+    rows = excute_select_query(select_query)
+
+    if not rows:
+        raise HTTPException(status_code=404 , detail="Shop Not Found")
+
+    select_query = f"SELECT * FROM Shops_Products WHERE shop_id = '{shop_id}';"
+    rows = excute_select_query(select_query)
+
+    products_ids = [row[1] for row in rows]
+
+    select_query = f"SELECT * FROM Products WHERE id IN ({','.join(products_ids)});"
+    rows = excute_select_query(select_query)
+
+    return rows
+
+@app.post("/product")
+def create_product(product:dict , access_token:Optional[str] = Header(None)):
+    ID = validate_access_token(access_token)
+
+    if not valid_product(product):
+        raise HTTPException(status_code=400 , detail="Missing Product Fields")
+
+    insert_query = f"INSERT INTO Products ( name , type , latitude , longitude) VALUES ('{product['name']}' , '{product['type']}' , {product['latitude']} , {product['longitude']} );"
     excute_insert_query(insert_query)
 
-    select_query = f"SELECT * FROM Favorite_Stores WHERE store_id = '{store_id['id']}' AND student_id = '{ID}';"
-    rows = excute_select_query(select_query)
-    return True
+    return product
 
-@app.get("/store/favorite")
-def get_favorite_store(access_token:Optional[str]= Header(None)):
+@app.get("/product")
+def get_products(access_token:Optional[str]= Header(None)):
     ID = validate_access_token(access_token)
 
-    select_query = f"SELECT * FROM Favorite_Stores WHERE student_id = '{ID}';"
+    select_query = "SELECT * FROM Products;"
+
     rows = excute_select_query(select_query)
-    
-    stores_ids = []
-    for row in rows:
-        stores_ids.append(str(row[2]))
-    
-    fav_stores = f"SELECT * FROM Stores WHERE id IN ({','.join(stores_ids)});"
-    rows = excute_select_query(fav_stores)
 
     return rows
 
-
-@app.get("/store/favorite/{store_id}")
-def get_favorite_store_by_id(store_id:int , access_token:Optional[str]= Header(None)):
+@app.get("/product/shops")
+def get_shops_that_sells_product(product_id:dict , access_token:Optional[str] = Header(None)):
     ID = validate_access_token(access_token)
+    product_id = product_id['id']
 
-    select_query = f"SELECT * FROM Favorite_Stores WHERE store_id = '{store_id}' AND student_id = '{ID}';"
-
+    select_query = f"SELECT * FROM Products WHERE id = '{product_id}';"
     rows = excute_select_query(select_query)
 
-    if not rows :
-        raise HTTPException(status_code=404 , detail="Favorite Store Not Found")
-    
-    store_id = rows[0][2]
-    
-    select_store_query = f"SELECT * FROM Stores WHERE id = '{store_id}';"
-    rows = excute_select_query(select_store_query)
+    if not rows:
+        raise HTTPException(status_code=404 , detail="Product Not Found")
 
-    return rows[0]
+    select_query = f"SELECT * FROM Products_Shops WHERE product_id = '{product_id}';"
+    rows = excute_select_query(select_query)
+
+    shops_ids = [row[1] for row in rows]
+
+    select_query = f"SELECT * FROM Shops WHERE id IN ({','.join(shops_ids)});"
+    rows = excute_select_query(select_query)
+
+    return rows
 
 @app.get("/token")
 def get_token(access_token:Optional[str]= Header(None)):
