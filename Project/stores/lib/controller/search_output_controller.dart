@@ -15,7 +15,7 @@ class SearchOutputController extends GetxController {
 
   SearchPageController searchController = Get.put(SearchPageController());
 
-  BehaviorSubject<List<ProductModel>> _searchOutput =
+  final BehaviorSubject<List<ProductModel>> _searchOutput =
       BehaviorSubject<List<ProductModel>>();
 
   Stream<List<ProductModel>> get searchOutput$ => _searchOutput.stream;
@@ -61,5 +61,11 @@ class SearchOutputController extends GetxController {
     }
     print(products);
     _searchOutput.value = products;
+  }
+
+@override
+  void dispose() {
+    _searchOutput.close();
+    super.dispose();
   }
 }

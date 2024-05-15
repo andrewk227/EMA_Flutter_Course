@@ -20,6 +20,12 @@ class _SeacrhResultPageState extends State<SeacrhResultPage> {
     searchOutputController.fetchSearchOutput();
   }
 
+  // @override
+  // void dispose() {
+  //   searchOutputController.dispose();
+  //   super.dispose();
+  // }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
