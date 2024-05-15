@@ -29,7 +29,7 @@ class AddStoreController extends GetxController {
 
     try {
       final response = await http.post(
-        Uri.parse("$HOST/store"),
+        Uri.parse("$HOST/shop"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           "access-token": token

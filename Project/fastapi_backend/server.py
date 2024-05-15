@@ -178,6 +178,21 @@ def get_products(access_token:Optional[str]= Header(None)) -> list[Product]:
     products = [Product(**dict(zip(product_fields , row))) for row in rows]
     return products
 
+@app.get("/product/{product_name}")
+def get_products(product_name:str,access_token:Optional[str]= Header(None)) -> list[Product]:
+    ID = validate_access_token(access_token)
+    product_name = product_name.lower()
+
+    select_query = "SELECT * FROM Products;"
+
+    rows = excute_select_query(select_query)
+
+    products = [Product(**dict(zip(product_fields , row))) for row in rows]
+
+    new_products = list(filter(lambda product: product_name in product.name.lower() , products))
+
+    return new_products
+
 @app.get("/product/shops/{product_id}")
 def get_shops_that_sells_product(product_id:int , access_token:Optional[str] = Header(None)) -> list[Shop]:
     ID = validate_access_token(access_token)

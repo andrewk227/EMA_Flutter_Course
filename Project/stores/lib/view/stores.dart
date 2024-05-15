@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:stores/controller/favourite_controller.dart';
 import 'package:stores/controller/store_controller.dart';
 import 'package:stores/routes/routes.dart';
 import 'package:stores/view/add_store.dart';
-import 'package:stores/view/favourites.dart';
 
 import '../model/store.dart';
 
@@ -17,7 +15,6 @@ class StoresPage extends StatefulWidget {
 
 class _StoresPageState extends State<StoresPage> {
   StoreController _storeController = Get.put(StoreController());
-  FavouriteController favouriteController = Get.put(FavouriteController());
 
   @override
   Widget build(BuildContext context) {
@@ -42,19 +39,16 @@ class _StoresPageState extends State<StoresPage> {
             ),
             IconButton(
               onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const Favourites()));
+                Navigator.pushNamed(context, AppRoutes.profileScreen);
               },
-              icon: const Icon(Icons.favorite),
+              icon: const Icon(Icons.person),
               color: Colors.white,
             ),
             IconButton(
               onPressed: () {
-                Navigator.pushNamed(context, AppRoutes.profileScreen);
+                Navigator.pushNamed(context, AppRoutes.searchScreen);
               },
-              icon: const Icon(Icons.person),
+              icon: const Icon(Icons.search),
               color: Colors.white,
             ),
           ],
@@ -71,36 +65,50 @@ class _StoresPageState extends State<StoresPage> {
                     String name = snapshot.data!;
                     return Text(
                       "Store Name: $name",
-                      style: TextStyle(fontSize: 20),
+                      style: const TextStyle(fontSize: 20),
                     );
                   } else {
-                    return CircularProgressIndicator();
+                    return const CircularProgressIndicator();
                   }
                 },
               ),
-              StreamBuilder<String>(
-                stream: _storeController.address$,
+              StreamBuilder<double>(
+                stream: _storeController.longitude$,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    String address = snapshot.data!;
+                    double longitude = snapshot.data!;
                     return Text(
-                      "Store Address: $address",
-                      style: TextStyle(fontSize: 20),
+                      "Store Address: $longitude",
+                      style: const TextStyle(fontSize: 20),
                     );
                   } else {
-                    return CircularProgressIndicator();
+                    return const CircularProgressIndicator();
                   }
                 },
               ),
-              SizedBox(height: 20),
+              StreamBuilder<double>(
+                stream: _storeController.latitude$,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    double latitude = snapshot.data!;
+                    return Text(
+                      "Store Address: $latitude",
+                      style: const TextStyle(fontSize: 20),
+                    );
+                  } else {
+                    return const CircularProgressIndicator();
+                  }
+                },
+              ),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () async {
                   List<StoreModel> stores = await _storeController.getStores();
                   // Display fetched stores or perform any other action
                 },
-                child: Text("Fetch Stores"),
+                child: const Text("Fetch Stores"),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () async {
                   bool toggled = await _storeController
@@ -111,7 +119,7 @@ class _StoresPageState extends State<StoresPage> {
                     // Handle failure
                   }
                 },
-                child: Text("Toggle Favorite"),
+                child: const Text("Toggle Favorite"),
               ),
             ],
           ),

@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:stores/controller/adding_store_controller.dart';
 import 'package:stores/model/store.dart';
 import 'package:stores/routes/routes.dart';
-import 'package:stores/view/favourites.dart';
 import 'package:stores/view/stores.dart';
 
 class AddStore extends StatefulWidget {

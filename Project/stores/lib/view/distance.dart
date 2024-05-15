@@ -18,8 +18,9 @@ class _DistanceState extends State<Distance> {
   Widget build(BuildContext context) {
     final StoreModel store =
         ModalRoute.of(context)!.settings.arguments as StoreModel;
-    double long = distanceController.getlongitude(store.address);
-    double lat = distanceController.getLatitude(store.address);
+
+    double long = store.longitude;
+    double lat = store.latitude;
     double distance = distanceController.calculateDistance(
         distanceController.currentPosition.latitude,
         distanceController.currentPosition.longitude,
@@ -70,7 +71,7 @@ class _DistanceState extends State<Distance> {
               height: 10,
             ),
             Text(
-              "Store Address: ${store.address}",
+              "Store Address: ${store.longitude + store.latitude}",
               style: const TextStyle(fontSize: 20),
             ),
             const SizedBox(

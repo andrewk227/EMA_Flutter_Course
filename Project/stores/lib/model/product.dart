@@ -3,16 +3,11 @@ import 'package:flutter/material.dart';
 class ProductModel extends ChangeNotifier {
   int id = 0;
   String name = "Product X";
-  String price = "None";
+  double price = 0.0;
 
   ProductModel({
     this.id = 0,
     this.name = "Product X",
-    this.price = "None",
+    this.price = 0.0,
   });
-
-  // void toggleFavorite() {
-  //   isFavorite = !isFavorite;
-  //   notifyListeners();
-  // }
 }
