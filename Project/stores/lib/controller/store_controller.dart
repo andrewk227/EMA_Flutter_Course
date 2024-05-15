@@ -60,30 +60,6 @@ class StoreController extends GetxController {
     return stores;
   }
 
-  Future<bool> toggleFavorite(int id) async {
-    String? token = await storage.read(key: "access_token");
-    if (token == null) {
-      return false;
-    }
-
-    try {
-      final response = await http.post(
-        Uri.parse("$HOST/store/favorite"),
-        headers: <String, String>{
-          "access-token": token,
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(<String, int>{'id': id}),
-      );
-      if (response.statusCode == 201) {
-        return true;
-      }
-    } catch (e) {
-      print(e);
-    }
-    return false;
-  }
-
   void dispose() {
     name.close();
     super.dispose();

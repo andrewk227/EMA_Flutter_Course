@@ -140,7 +140,7 @@ def get_shop_products(shop_id:int , access_token:Optional[str] = Header(None))->
     select_query = f"SELECT * FROM Shops_Products WHERE shop_id = '{shop_id}';"
     rows = excute_select_query(select_query)
 
-    products_ids = [row[1] for row in rows]
+    products_ids = [str(row[1]) for row in rows]
 
     select_query = f"SELECT * FROM Products WHERE id IN ({','.join(products_ids)});"
     rows = excute_select_query(select_query)
