@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:rxdart/rxdart.dart';
 import 'package:stores/global.dart';
+import 'package:stores/model/product.dart';
 import 'package:stores/model/shops.dart';
 
 class StoreController extends GetxController {
@@ -14,16 +15,6 @@ class StoreController extends GetxController {
   final longitude = BehaviorSubject<double>();
   final latitude = BehaviorSubject<double>();
   final storage = FlutterSecureStorage();
-
-// getters to get the value of the variables
-  Stream<String> get name$ => name.stream;
-  Stream<double> get longitude$ => longitude.stream;
-  Stream<double> get latitude$ => latitude.stream;
-
-// Setter to update the value of the variables
-  Function(String) get setName => name.sink.add;
-  Function(double) get setLongitude => longitude.sink.add;
-  Function(double) get setLatitude => latitude.sink.add;
 
   Future<List<ShopModel>> getStores() async {
     List<dynamic> data = [];

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:stores/controller/shop_menu_controller.dart';
 import 'package:stores/controller/store_controller.dart';
 import 'package:stores/model/shops.dart';
 import 'package:stores/routes/routes.dart';
@@ -14,6 +15,7 @@ class StoresPage extends StatefulWidget {
 
 class _StoresPageState extends State<StoresPage> {
   StoreController _storeController = Get.put(StoreController());
+  ShopMenuController shopMenuController = Get.put(ShopMenuController());
 
   @override
   Widget build(BuildContext context) {
@@ -53,68 +55,44 @@ class _StoresPageState extends State<StoresPage> {
           ],
           backgroundColor: Colors.purple,
         ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              StreamBuilder<String>(
-                stream: _storeController.name$,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    String name = snapshot.data!;
-                    return Text(
-                      "Store Name: $name",
-                      style: const TextStyle(fontSize: 20),
-                    );
-                  } else {
-                    return const CircularProgressIndicator();
-                  }
-                },
-              ),
-              StreamBuilder<double>(
-                stream: _storeController.longitude$,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    double longitude = snapshot.data!;
-                    return Text(
-                      "Store Address: $longitude",
-                      style: const TextStyle(fontSize: 20),
-                    );
-                  } else {
-                    return const CircularProgressIndicator();
-                  }
-                },
-              ),
-              StreamBuilder<double>(
-                stream: _storeController.latitude$,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    double latitude = snapshot.data!;
-                    return Text(
-                      "Store Address: $latitude",
-                      style: const TextStyle(fontSize: 20),
-                    );
-                  } else {
-                    return const CircularProgressIndicator();
-                  }
-                },
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () async {
-                  List<ShopModel> stores = await _storeController.getStores();
-                  // Display fetched stores or perform any other action
-                },
-                child: const Text("Fetch Stores"),
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () async {},
-                child: const Text("Toggle Favorite"),
-              ),
-            ],
-          ),
-        ),
+        body: FutureBuilder(
+            future: _storeController.getStores(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              }
+              if (snapshot.hasData) {
+                List<ShopModel> shops = snapshot.data as List<ShopModel>;
+                return ListView.builder(
+                  itemCount: shops.length,
+                  itemBuilder: (context, index) {
+                    return Container(
+                        padding: const EdgeInsets.all(8.0),
+                        child: GestureDetector(
+                          onTap: () {
+                            shopMenuController.setShopId(shops[index].id);
+                            Navigator.pushNamed(
+                                context, AppRoutes.storeMenuScreen);
+                          },
+                          child: Card(
+                              child: ListTile(
+                            title: Text(shops[index].name),
+                            subtitle: Text(
+                                'longitude: ${shops[index].longitude.toString()}, latitude: ${shops[index].latitude.toString()}'),
+                          )),
+                        ));
+                  },
+                );
+              }
+              return const Center(
+                child: Text('No data'),
+              );
+            }),
       ),
     );
   }
