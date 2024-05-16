@@ -8,17 +8,23 @@ import 'package:stores/global.dart';
 import 'package:stores/model/product.dart';
 import 'package:http/http.dart' as http;
 
-class SearchOutputController extends GetxController {
-  static SearchOutputController get instance => Get.find();
+class SearchResultController extends GetxController {
+  static SearchResultController get instance => Get.find();
 
-  final storage = FlutterSecureStorage();
+  final storage = const FlutterSecureStorage();
 
   SearchPageController searchController = Get.put(SearchPageController());
 
-  final BehaviorSubject<List<ProductModel>> _searchOutput =
+  BehaviorSubject<List<ProductModel>> _searchResult =
       BehaviorSubject<List<ProductModel>>();
 
-  Stream<List<ProductModel>> get searchOutput$ => _searchOutput.stream;
+  Stream<List<ProductModel>> get searchResult$ => _searchResult.stream;
+  // Function<List<ProductModel>> get setSearchResult => _searchResult.sink.add;
+
+  List<ProductModel> get searchResult => _searchResult.value;
+
+  set setSearchResult$(BehaviorSubject<List<ProductModel>> value) =>
+      _searchResult = value;
 
   Future<void> fetchSearchOutput() async {
     List<dynamic> data = [];
@@ -28,13 +34,6 @@ class SearchOutputController extends GetxController {
     }
 
     try {
-      print("Value: ");
-      print(searchController.searchResult.value);
-      print("stream: ");
-      print(searchController.searchResult.stream);
-      print("stream.value: ");
-      print(searchController.searchResult.stream.value);
-
       final response = await http.get(
           Uri.parse("$HOST/product/${searchController.searchResult.value}"),
           headers: <String, String>{
@@ -60,12 +59,12 @@ class SearchOutputController extends GetxController {
       products.add(storeInstance);
     }
     print(products);
-    _searchOutput.value = products;
+    _searchResult.value = products;
   }
 
-@override
+  @override
   void dispose() {
-    _searchOutput.close();
+    _searchResult.close();
     super.dispose();
   }
 }

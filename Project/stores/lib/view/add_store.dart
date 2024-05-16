@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stores/controller/adding_store_controller.dart';
-import 'package:stores/model/store.dart';
+import 'package:stores/model/shops.dart';
 import 'package:stores/routes/routes.dart';
 import 'package:stores/view/stores.dart';
 

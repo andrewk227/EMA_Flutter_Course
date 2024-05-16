@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stores/controller/distance_controller.dart';
-import 'package:stores/model/store.dart';
+import 'package:stores/model/shops.dart';
 import 'package:stores/routes/routes.dart';
 
 class Distance extends StatefulWidget {
@@ -16,8 +16,8 @@ class _DistanceState extends State<Distance> {
 
   @override
   Widget build(BuildContext context) {
-    final StoreModel store =
-        ModalRoute.of(context)!.settings.arguments as StoreModel;
+    final ShopModel store =
+        ModalRoute.of(context)!.settings.arguments as ShopModel;
 
     double long = store.longitude;
     double lat = store.latitude;

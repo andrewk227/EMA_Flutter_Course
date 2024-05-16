@@ -11,7 +11,9 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  SearchPageController _searchController = Get.put(SearchPageController());
+  final SearchPageController _searchController =
+      Get.put(SearchPageController());
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(

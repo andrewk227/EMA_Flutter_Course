@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stores/controller/store_controller.dart';
+import 'package:stores/model/shops.dart';
 import 'package:stores/routes/routes.dart';
 import 'package:stores/view/add_store.dart';
-
-import '../model/store.dart';
 
 class StoresPage extends StatefulWidget {
   const StoresPage({super.key});
@@ -103,22 +102,14 @@ class _StoresPageState extends State<StoresPage> {
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () async {
-                  List<StoreModel> stores = await _storeController.getStores();
+                  List<ShopModel> stores = await _storeController.getStores();
                   // Display fetched stores or perform any other action
                 },
                 child: const Text("Fetch Stores"),
               ),
               const SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () async {
-                  bool toggled = await _storeController
-                      .toggleFavorite(1); // Provide a valid store ID
-                  if (toggled) {
-                    // Handle success
-                  } else {
-                    // Handle failure
-                  }
-                },
+                onPressed: () async {},
                 child: const Text("Toggle Favorite"),
               ),
             ],

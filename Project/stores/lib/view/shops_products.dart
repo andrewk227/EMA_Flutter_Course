@@ -1,31 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:stores/controller/search_result_controller.dart';
 import 'package:stores/controller/shop_products_controller.dart';
 import 'package:stores/model/product.dart';
+import 'package:stores/model/shops.dart';
 import 'package:stores/routes/routes.dart';
 
-class SeacrhResultPage extends StatefulWidget {
-  const SeacrhResultPage({super.key});
+class ShopProductsPage extends StatefulWidget {
+  const ShopProductsPage({
+    super.key,
+  });
 
   @override
-  State<SeacrhResultPage> createState() => _SeacrhResultPageState();
+  State<ShopProductsPage> createState() => _ShopProductsPageState();
 }
 
-class _SeacrhResultPageState extends State<SeacrhResultPage> {
-  SearchResultController searchResultController =
-      Get.put(SearchResultController());
+class _ShopProductsPageState extends State<ShopProductsPage> {
   ShopProductsController shopProductsController =
       Get.put(ShopProductsController());
 
   @override
   void initState() {
-    searchResultController.setSearchResult$ =
-        BehaviorSubject<List<ProductModel>>();
+    shopProductsController.setShops(BehaviorSubject<List<ShopModel>>());
 
     super.initState();
-    searchResultController.fetchSearchOutput();
+    shopProductsController.fetchShops();
   }
 
   // @override
@@ -39,12 +38,12 @@ class _SeacrhResultPageState extends State<SeacrhResultPage> {
     return SafeArea(
         child: Scaffold(
             appBar: AppBar(
-              title: const Text("Search Result",
+              title: const Text("Shops Result",
                   style: TextStyle(color: Colors.white)),
               backgroundColor: Colors.purple,
             ),
             body: FutureBuilder(
-                future: searchResultController.searchResult$.first,
+                future: shopProductsController.shops$.first,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(
@@ -55,28 +54,19 @@ class _SeacrhResultPageState extends State<SeacrhResultPage> {
                     return Center(child: Text('Error: ${snapshot.error}'));
                   }
                   if (snapshot.hasData) {
-                    List<ProductModel> products =
-                        snapshot.data as List<ProductModel>;
+                    List<ShopModel> products = snapshot.data as List<ShopModel>;
                     return ListView.builder(
                       itemCount: products.length,
                       itemBuilder: (context, index) {
                         return Container(
-                            padding: const EdgeInsets.all(8.0),
-                            child: GestureDetector(
-                              onTap: () {
-                                print("hi hi {{${products[index].id}}}");
-                                shopProductsController
-                                    .setProductId(products[index].id);
-                                Navigator.pushNamed(
-                                    context, AppRoutes.shopProductScreen);
-                              },
-                              child: Card(
-                                  child: ListTile(
-                                title: Text(products[index].name),
-                                subtitle:
-                                    Text(products[index].price.toString()),
-                              )),
-                            ));
+                          padding: const EdgeInsets.all(8.0),
+                          child: Card(
+                              child: ListTile(
+                            title: Text(products[index].name),
+                            subtitle: Text(
+                                "${products[index].longitude},${products[index].latitude}"),
+                          )),
+                        );
                       },
                     );
                   }

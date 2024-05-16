@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:rxdart/rxdart.dart';
 import 'package:stores/global.dart';
-import 'package:stores/model/store.dart';
+import 'package:stores/model/shops.dart';
 
 class StoreController extends GetxController {
   static StoreController get instance => Get.find();
@@ -25,7 +25,7 @@ class StoreController extends GetxController {
   Function(double) get setLongitude => longitude.sink.add;
   Function(double) get setLatitude => latitude.sink.add;
 
-  Future<List<StoreModel>> getStores() async {
+  Future<List<ShopModel>> getStores() async {
     List<dynamic> data = [];
     String? token = await storage.read(key: "access_token");
     if (token == null) {
@@ -46,10 +46,10 @@ class StoreController extends GetxController {
       print(e);
     }
 
-    List<StoreModel> stores = [];
+    List<ShopModel> stores = [];
 
     for (int i = 0; i < data.length; i++) {
-      StoreModel storeInstance = StoreModel(
+      ShopModel storeInstance = ShopModel(
           id: data[i]["id"],
           name: data[i]["name"],
           longitude: data[i]["longitude"],
