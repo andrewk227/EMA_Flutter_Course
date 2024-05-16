@@ -4,14 +4,14 @@ import 'package:rxdart/rxdart.dart';
 import 'package:stores/controller/shop_menu_controller.dart';
 import 'package:stores/model/product.dart';
 
-class StoreMenuPage extends StatefulWidget {
-  const StoreMenuPage({super.key});
+class ShopMenuPage extends StatefulWidget {
+  const ShopMenuPage({super.key});
 
   @override
-  State<StoreMenuPage> createState() => _StoreProductsPageState();
+  State<ShopMenuPage> createState() => _ShopProductsPageState();
 }
 
-class _StoreProductsPageState extends State<StoreMenuPage> {
+class _ShopProductsPageState extends State<ShopMenuPage> {
   ShopMenuController MenuPageController = Get.put(ShopMenuController());
 
   @override
@@ -26,7 +26,7 @@ class _StoreProductsPageState extends State<StoreMenuPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Store Products",
+          "Shop Products",
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: Colors.purple,

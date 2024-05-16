@@ -80,7 +80,7 @@ class _LoginPageState extends State<LoginPage> {
                       print(result);
                       if (result) {
                         // navigate to home
-                        Navigator.pushNamed(context, AppRoutes.storesScreen);
+                        Navigator.pushNamed(context, AppRoutes.shopsScreen);
                       } else {
                         // show error
                         ScaffoldMessenger.of(context)

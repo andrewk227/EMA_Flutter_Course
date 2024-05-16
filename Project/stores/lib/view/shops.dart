@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:stores/controller/shop_menu_controller.dart';
-import 'package:stores/controller/store_controller.dart';
+import 'package:stores/controller/shop_controller.dart';
 import 'package:stores/model/shops.dart';
 import 'package:stores/routes/routes.dart';
-import 'package:stores/view/add_store.dart';
+import 'package:stores/view/add_shop.dart';
 
-class StoresPage extends StatefulWidget {
-  const StoresPage({super.key});
+class ShopsPage extends StatefulWidget {
+  const ShopsPage({super.key});
 
   @override
-  State<StoresPage> createState() => _StoresPageState();
+  State<ShopsPage> createState() => _ShopsPageState();
 }
 
-class _StoresPageState extends State<StoresPage> {
-  StoreController _storeController = Get.put(StoreController());
+class _ShopsPageState extends State<ShopsPage> {
+  ShopController _shopController = Get.put(ShopController());
   ShopMenuController shopMenuController = Get.put(ShopMenuController());
 
   @override
@@ -23,7 +23,7 @@ class _StoresPageState extends State<StoresPage> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text(
-            "All Stores",
+            "All Shops",
             style: TextStyle(color: Colors.white),
           ),
           actions: [
@@ -32,7 +32,7 @@ class _StoresPageState extends State<StoresPage> {
                 Navigator.pop(context);
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const AddStore()),
+                  MaterialPageRoute(builder: (context) => const AddShop()),
                 );
               },
               icon: const Icon(Icons.add),
@@ -56,7 +56,7 @@ class _StoresPageState extends State<StoresPage> {
           backgroundColor: Colors.purple,
         ),
         body: FutureBuilder(
-            future: _storeController.getStores(),
+            future: _shopController.getShops(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(
@@ -77,7 +77,7 @@ class _StoresPageState extends State<StoresPage> {
                           onTap: () {
                             shopMenuController.setShopId(shops[index].id);
                             Navigator.pushNamed(
-                                context, AppRoutes.storeMenuScreen);
+                                context, AppRoutes.shopMenuScreen);
                           },
                           child: Card(
                               child: ListTile(

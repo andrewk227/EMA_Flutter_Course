@@ -5,18 +5,17 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:rxdart/rxdart.dart';
 import 'package:stores/global.dart';
-import 'package:stores/model/product.dart';
 import 'package:stores/model/shops.dart';
 
-class StoreController extends GetxController {
-  static StoreController get instance => Get.find();
+class ShopController extends GetxController {
+  static ShopController get instance => Get.find();
 
   final name = BehaviorSubject<String>();
   final longitude = BehaviorSubject<double>();
   final latitude = BehaviorSubject<double>();
   final storage = FlutterSecureStorage();
 
-  Future<List<ShopModel>> getStores() async {
+  Future<List<ShopModel>> getShops() async {
     List<dynamic> data = [];
     String? token = await storage.read(key: "access_token");
     if (token == null) {
@@ -37,7 +36,7 @@ class StoreController extends GetxController {
       print(e);
     }
 
-    List<ShopModel> stores = [];
+    List<ShopModel> shops = [];
 
     for (int i = 0; i < data.length; i++) {
       ShopModel storeInstance = ShopModel(
@@ -45,10 +44,10 @@ class StoreController extends GetxController {
           name: data[i]["name"],
           longitude: data[i]["longitude"],
           latitude: data[i]["latitude"]);
-      stores.add(storeInstance);
+      shops.add(storeInstance);
     }
-    print(stores);
-    return stores;
+    print(shops);
+    return shops;
   }
 
   void dispose() {

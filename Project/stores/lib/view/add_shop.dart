@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:stores/controller/adding_store_controller.dart';
-import 'package:stores/model/shops.dart';
 import 'package:stores/routes/routes.dart';
-import 'package:stores/view/stores.dart';
 
-class AddStore extends StatefulWidget {
-  const AddStore({super.key});
+import '../controller/adding_shop_controller.dart';
+
+class AddShop extends StatefulWidget {
+  const AddShop({super.key});
 
   @override
-  State<AddStore> createState() => _AddStoreState();
+  State<AddShop> createState() => _AddShopState();
 }
 
-class _AddStoreState extends State<AddStore> {
-  AddStoreController controller = Get.put(AddStoreController());
+class _AddShopState extends State<AddShop> {
+  AddShopController controller = Get.put(AddShopController());
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +26,7 @@ class _AddStoreState extends State<AddStore> {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.pushNamed(context, AppRoutes.storesScreen);
+              Navigator.pushNamed(context, AppRoutes.shopsScreen);
             },
             icon: const Icon(Icons.home),
             color: Colors.white,
@@ -82,7 +81,7 @@ class _AddStoreState extends State<AddStore> {
           ),
           ElevatedButton.icon(
               onPressed: () async {
-                bool flag = await controller.addStore();
+                bool flag = await controller.addShop();
                 if (flag) {
                   controller.snackBar = const SnackBar(
                     content: Text("Store Added Successfully"),
@@ -90,7 +89,7 @@ class _AddStoreState extends State<AddStore> {
                   ScaffoldMessenger.of(context)
                       .showSnackBar(controller.snackBar);
                   Navigator.pop(context);
-                  Navigator.pushNamed(context, AppRoutes.storesScreen);
+                  Navigator.pushNamed(context, AppRoutes.shopsScreen);
                 } else {
                   controller.snackBar = const SnackBar(
                     content: Text("Store Can't Added"),
