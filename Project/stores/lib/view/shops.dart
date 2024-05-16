@@ -4,7 +4,6 @@ import 'package:stores/controller/shop_menu_controller.dart';
 import 'package:stores/controller/shop_controller.dart';
 import 'package:stores/model/shops.dart';
 import 'package:stores/routes/routes.dart';
-import 'package:stores/view/add_shop.dart';
 
 class ShopsPage extends StatefulWidget {
   const ShopsPage({super.key});
@@ -27,17 +26,6 @@ class _ShopsPageState extends State<ShopsPage> {
             style: TextStyle(color: Colors.white),
           ),
           actions: [
-            IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const AddShop()),
-                );
-              },
-              icon: const Icon(Icons.add),
-              color: Colors.white,
-            ),
             IconButton(
               onPressed: () {
                 Navigator.pushNamed(context, AppRoutes.profileScreen);

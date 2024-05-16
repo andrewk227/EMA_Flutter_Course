@@ -62,4 +62,12 @@ class DistanceController extends GetxController {
     return roundTo(
         Geolocator.distanceBetween(lat1, lon1, lat2, lon2) / 1000, 2);
   }
+
+  double caculateDistanceFromCurrent(double lat2, double lon2) {
+    return roundTo(
+        Geolocator.distanceBetween(currentPosition.latitude,
+                currentPosition.longitude, lat2, lon2) /
+            1000,
+        2);
+  }
 }

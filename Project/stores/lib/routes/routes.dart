@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:stores/view/add_shop.dart';
 import 'package:stores/view/login.dart';
 import 'package:stores/view/map_screen.dart';
 import 'package:stores/view/profile.dart';
@@ -25,7 +24,6 @@ class AppRoutes {
   static const String shopMenuScreen = '/shop_menu';
 
   static Map<String, WidgetBuilder> routes = {
-    addShopScreen: (context) => const AddShop(),
     shopsScreen: (context) => const ShopsPage(),
     loginScreen: (context) => const LoginPage(),
     signUpScreen: (context) => const SignUpPage(),
