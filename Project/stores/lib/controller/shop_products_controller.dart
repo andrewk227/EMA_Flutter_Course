@@ -14,6 +14,8 @@ class ShopProductsController extends GetxController {
   BehaviorSubject<List<ShopModel>> _shops = BehaviorSubject<List<ShopModel>>();
   Stream<List<ShopModel>> get shops$ => _shops.stream;
 
+  List<ShopModel> get shopsValues => _shops.value;
+
   BehaviorSubject<int> productId = BehaviorSubject<int>();
   Stream<int> get productId$ => productId.stream;
   Function(int) get setProductId => productId.sink.add;

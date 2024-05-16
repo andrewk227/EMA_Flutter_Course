@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:stores/controller/distance_controller.dart';
 import 'package:stores/controller/shop_products_controller.dart';
-import 'package:stores/model/product.dart';
 import 'package:stores/model/shops.dart';
 import 'package:stores/routes/routes.dart';
 
@@ -18,6 +18,8 @@ class ShopProductsPage extends StatefulWidget {
 class _ShopProductsPageState extends State<ShopProductsPage> {
   ShopProductsController shopProductsController =
       Get.put(ShopProductsController());
+
+  DistanceController distanceController = Get.put(DistanceController());
 
   @override
   void initState() {
@@ -38,6 +40,15 @@ class _ShopProductsPageState extends State<ShopProductsPage> {
     return SafeArea(
         child: Scaffold(
             appBar: AppBar(
+              actions: [
+                IconButton(
+                  onPressed: () async {
+                    await distanceController.getCurrentPosition();
+                    Navigator.pushNamed(context, AppRoutes.mapScreen);
+                  },
+                  icon: const Icon(Icons.map_outlined , color: Colors.white),
+                )
+              ],
               title: const Text("Shops Result",
                   style: TextStyle(color: Colors.white)),
               backgroundColor: Colors.purple,

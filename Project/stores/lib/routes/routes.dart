@@ -4,6 +4,7 @@ import 'package:stores/model/shops.dart';
 import 'package:stores/view/add_store.dart';
 import 'package:stores/view/distance.dart';
 import 'package:stores/view/login.dart';
+import 'package:stores/view/map_screen.dart';
 import 'package:stores/view/profile.dart';
 import 'package:stores/view/search_result.dart';
 import 'package:stores/view/search_screen.dart';
@@ -22,6 +23,7 @@ class AppRoutes {
   static const String searchScreen = '/search_screen';
   static const String searchResultScreen = '/search_result';
   static const String shopProductScreen = '/shops_products';
+  static const String mapScreen = '/map_screen';
 
   static Map<String, WidgetBuilder> routes = {
     addStoreScreen: (context) => const AddStore(),
@@ -32,5 +34,6 @@ class AppRoutes {
     searchScreen: (context) => const SearchPage(),
     searchResultScreen: (context) => const SeacrhResultPage(),
     shopProductScreen: (context) => const ShopProductsPage(),
+    mapScreen: (context) => const MapPage(),
   };
 }

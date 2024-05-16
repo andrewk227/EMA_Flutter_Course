@@ -7,7 +7,6 @@ import 'package:geolocator/geolocator.dart';
 class DistanceController extends GetxController {
   static DistanceController get instance => Get.find();
 
-  String? currentAddress;
   late Position currentPosition;
 
   Future<bool> handleLocationPermission() async {
