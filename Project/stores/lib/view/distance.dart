@@ -44,7 +44,7 @@ class _DistanceState extends State<Distance> {
             ),
             IconButton(
               onPressed: () {
-                Navigator.pushNamed(context, AppRoutes.storesScreen);
+                Navigator.pushNamed(context, AppRoutes.shopsScreen);
               },
               icon: const Icon(Icons.home),
               color: Colors.white,

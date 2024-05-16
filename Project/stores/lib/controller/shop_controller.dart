@@ -7,25 +7,15 @@ import 'package:rxdart/rxdart.dart';
 import 'package:stores/global.dart';
 import 'package:stores/model/shops.dart';
 
-class StoreController extends GetxController {
-  static StoreController get instance => Get.find();
+class ShopController extends GetxController {
+  static ShopController get instance => Get.find();
 
   final name = BehaviorSubject<String>();
   final longitude = BehaviorSubject<double>();
   final latitude = BehaviorSubject<double>();
   final storage = FlutterSecureStorage();
 
-// getters to get the value of the variables
-  Stream<String> get name$ => name.stream;
-  Stream<double> get longitude$ => longitude.stream;
-  Stream<double> get latitude$ => latitude.stream;
-
-// Setter to update the value of the variables
-  Function(String) get setName => name.sink.add;
-  Function(double) get setLongitude => longitude.sink.add;
-  Function(double) get setLatitude => latitude.sink.add;
-
-  Future<List<ShopModel>> getStores() async {
+  Future<List<ShopModel>> getShops() async {
     List<dynamic> data = [];
     String? token = await storage.read(key: "access_token");
     if (token == null) {
@@ -46,7 +36,7 @@ class StoreController extends GetxController {
       print(e);
     }
 
-    List<ShopModel> stores = [];
+    List<ShopModel> shops = [];
 
     for (int i = 0; i < data.length; i++) {
       ShopModel storeInstance = ShopModel(
@@ -54,10 +44,10 @@ class StoreController extends GetxController {
           name: data[i]["name"],
           longitude: data[i]["longitude"],
           latitude: data[i]["latitude"]);
-      stores.add(storeInstance);
+      shops.add(storeInstance);
     }
-    print(stores);
-    return stores;
+    print(shops);
+    return shops;
   }
 
   void dispose() {

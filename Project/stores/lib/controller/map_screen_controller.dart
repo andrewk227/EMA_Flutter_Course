@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:stores/controller/distance_controller.dart';

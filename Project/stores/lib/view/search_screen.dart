@@ -26,7 +26,7 @@ class _SearchPageState extends State<SearchPage> {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.pushNamed(context, AppRoutes.addStoreScreen);
+              Navigator.pushNamed(context, AppRoutes.addShopScreen);
             },
             icon: const Icon(Icons.add),
             color: Colors.white,
