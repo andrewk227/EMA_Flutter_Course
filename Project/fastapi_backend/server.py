@@ -140,8 +140,6 @@ def delete_shop(shop_id:int , access_token:Optional[str] = Header(None)):
     
 @app.post("/shop/update/{shop_id}" , status_code=201)
 def update_shop(shop_id:int ,shop:ShopCreate , access_token:Optional[str] = Header(None)):
-
-    print(str(shop_id) + ', ' + str(shop.name )+ ', ' + str(shop.type) + ', ' + str(shop.latitude) + ', ' + str(shop.longitude))
     try:
         ID = validate_access_token(access_token)
 
