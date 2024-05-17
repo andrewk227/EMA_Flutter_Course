@@ -137,6 +137,21 @@ def delete_shop(shop_id:int , access_token:Optional[str] = Header(None)):
     except Exception as e:
         print(e);
         raise HTTPException(status_code=400 , detail="Shop Not Deleted")
+    
+@app.post("/shop/update/{shop_id}" , status_code=201)
+def update_shop(shop_id:int ,shop:ShopCreate , access_token:Optional[str] = Header(None)):
+
+    print(str(shop_id) + ', ' + str(shop.name )+ ', ' + str(shop.type) + ', ' + str(shop.latitude) + ', ' + str(shop.longitude))
+    try:
+        ID = validate_access_token(access_token)
+
+        update_query = f'UPDATE Shops SET name = "{shop.name}" , type = "{shop.type}" , latitude = "{shop.latitude}" , longitude = "{shop.longitude}" WHERE id = "{shop_id}";'
+        excute_update_query(update_query)
+        
+        return shop
+    except Exception as e:
+        print(e);
+        raise HTTPException(status_code=400 , detail="Shop Not Deleted")
 
 
 @app.get("/shop/products/{shop_id}")
