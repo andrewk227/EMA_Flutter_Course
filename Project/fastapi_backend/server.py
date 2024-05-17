@@ -126,6 +126,18 @@ def get_shops(access_token:Optional[str]= Header(None)) -> list[Shop]:
     
     return shops
 
+@app.post("/shop/delete/{shop_id}" , status_code=201)
+def delete_shop(shop_id:int , access_token:Optional[str] = Header(None)):
+    try:
+        ID = validate_access_token(access_token)
+
+        delete_query = f"DELETE FROM Shops WHERE id = '{shop_id}';"
+        excute_delete_query(delete_query)
+        return True
+    except Exception as e:
+        print(e);
+        raise HTTPException(status_code=400 , detail="Shop Not Deleted")
+
 
 @app.get("/shop/products/{shop_id}")
 def get_shop_products(shop_id:int , access_token:Optional[str] = Header(None))-> list[Product]:
